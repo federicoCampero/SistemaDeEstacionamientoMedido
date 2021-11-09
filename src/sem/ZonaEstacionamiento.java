@@ -1,4 +1,6 @@
-package SEM;
+package sem;
+
+import java.util.ArrayList;
 
 public class ZonaEstacionamiento {
 	private Inspector inspector;
