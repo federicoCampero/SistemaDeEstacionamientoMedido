@@ -2,7 +2,7 @@ package sem;
 
 import java.time.LocalTime;
 
-public class CelularApp {
+public class CelularApp implements MovementSensor {
 	
 	private SEM sem;
 	private int numero;
@@ -42,11 +42,27 @@ public class CelularApp {
 	private EstacionamientoMedianteApp crearEstacionamientoMedianteApp(String patente) {
 		LocalTime horaInicio = LocalTime.now();
 
-		return new EstacionamientoMedianteApp(patente,horaInicio,null,true,this.getNumero());
+		return new EstacionamientoMedianteApp(patente,horaInicio,this.calcularHoraMaximaAEstacionarSegunCredito(),true,this.getNumero());
 	}
 	
+	private LocalTime calcularHoraMaximaAEstacionarSegunCredito() {
+		return null;
+	}
+
 	public void finalizarEstacionamiento() {
 		sem.terminarVigenciaDelEstacionamiento(this.getNumero());
+	}
+
+	@Override
+	public void driving() {
+		this.getModo().salirDelEstacionamiento(this);
+		
+	}
+
+	@Override
+	public void walking() {
+		this.getModo().entrarAlEstacionamiento(this, patente);
+		
 	}
 	
 	
