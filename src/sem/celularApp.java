@@ -15,28 +15,23 @@ public class celularApp {
 	}
 	
 	// ASISTENCIA AL USUARIO
-	public void activarDeteccionDesplazamiento() {}
-	
-	
 	public void alertaIncioEstacionamiento() {
 		if(!sem.tieneEstacionamientoVigente(this.getNumero())) {
 			this.informarAlertaInicioEstacionamiento();
 		}
 	}
-	
 	public void alertaFinEstacionamiento() {
 		if(sem.tieneEstacionamientoVigente(this.getNumero())) {
 			this.informarAlertaFinEstacionamiento();
 		}
 	}
 	
-	private void informarAlertaInicioEstacionamiento() {
-		// TODO Auto-generated method stub
+	private String informarAlertaInicioEstacionamiento() {
+		return "Asegurese de inicar su estacionamiento";
 		
 	}
-	private void informarAlertaFinEstacionamiento() {
-		// TODO Auto-generated method stub
-		
+	private String informarAlertaFinEstacionamiento() {
+		return "Asegurese de finalizar su estacionamiento";
 	}
 	
 	
