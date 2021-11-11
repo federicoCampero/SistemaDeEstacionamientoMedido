@@ -4,7 +4,7 @@ public class celularApp {
 	private int numero;
 	private ItipoDeModo tipoDeModo;
 	private double saldo;
-	private boolean estacionamientoActivo;
+	private SEM sem;
 	
 	
 	public celularApp(int numero, ItipoDeModo tipoDeModo, double saldo) {
@@ -12,23 +12,24 @@ public class celularApp {
 		this.numero = numero;
 		this.tipoDeModo = tipoDeModo;
 		this.saldo = saldo;
-		this.estacionamientoActivo = false;
 	}
 	
 	// ASISTENCIA AL USUARIO
 	public void activarDeteccionDesplazamiento() {}
 	
+	
 	public void alertaIncioEstacionamiento() {
-		if(!this.isEstacionamientoActivo()) {
+		if(!sem.tieneEstacionamientoVigente(this.getNumero())) {
 			this.informarAlertaInicioEstacionamiento();
 		}
 	}
+	
 	public void alertaFinEstacionamiento() {
-		if(this.isEstacionamientoActivo()) {
+		if(sem.tieneEstacionamientoVigente(this.getNumero())) {
 			this.informarAlertaFinEstacionamiento();
 		}
-		
 	}
+	
 	private void informarAlertaInicioEstacionamiento() {
 		// TODO Auto-generated method stub
 		
@@ -57,12 +58,5 @@ public class celularApp {
 	}
 	public void setSaldo(double saldo) {
 		this.saldo = saldo;
-	}
-	public boolean isEstacionamientoActivo() {
-		return estacionamientoActivo;
-	}
-
-	public void setEstacionamientoActivo(boolean estacionamientoActivo) {
-		this.estacionamientoActivo = estacionamientoActivo;
 	}
 }

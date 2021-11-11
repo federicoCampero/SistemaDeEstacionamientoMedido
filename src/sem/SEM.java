@@ -52,6 +52,16 @@ public class SEM {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public boolean estacionamientoActivo(int numero) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean tieneEstacionamientoVigente(int numero) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 
 	
