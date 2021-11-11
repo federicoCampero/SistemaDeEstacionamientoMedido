@@ -5,23 +5,23 @@ public class SEM {
 	// INFORMACION AL USUARIO EN ESTACIONAMIENTO VIA APP
 	
 	// Evento 1 - Inicio de Estacionamiento
-	public void eventoInicioEstacionamientoViaApp(int numero, int patente) {
+	public void registrarInicioEstacionamientoViaApp(int numero, int patente) {
 		if(this.saldoSuficiente(numero)) {
-			this.informarInicioEstacionamiento(numero);
-			this.iniciarEstacionamiento(numero, patente);
+			this.eventoInicioEstacionamientoViaApp(numero);
+			this.iniciarEstacionamientoEnSEM(numero, patente);
 		} else {
 			this.informarSaldoInsuficiente(numero);
 		}
 	}
 	
 	// Evento 2 - Fin de Estacionamiento
-	public void eventoFinEstacionamiento(int numero) {
-		this.informarFinEstacionamiento(numero);
-		this.finalizarEstacionamiento(numero);
+	public void registrarFinEstacionamientoViaApp(int numero) {
+		this.eventoFinEstacionamientoViaApp(numero);
+		this.finalizarEstacionamientoEnSEM(numero);
 	}
 	
 	// Evento 3 - Consulta de saldo
-	public double consultaDeSaldo(int numero) {
+	public double consultaDeSaldoViaApp(int numero) {
 		return 2;
 	}
 	
@@ -30,11 +30,11 @@ public class SEM {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	private void informarInicioEstacionamiento(int numero) {
+	private void eventoInicioEstacionamientoViaApp(int numero) {
 		// TODO Auto-generated method stub
 		
 	}
-	private void iniciarEstacionamiento(int numero, int patente) {
+	private void iniciarEstacionamientoEnSEM(int numero, int patente) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -44,11 +44,11 @@ public class SEM {
 	}
 	
 	// Metodos evento 2
-	private void finalizarEstacionamiento(int numero) {
+	private void finalizarEstacionamientoEnSEM(int numero) {
 		// TODO Auto-generated method stub
 		
 	}
-	private void informarFinEstacionamiento(int numero) {
+	private void eventoFinEstacionamientoViaApp(int numero) {
 		// TODO Auto-generated method stub
 		
 	}
