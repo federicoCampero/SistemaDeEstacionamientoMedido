@@ -59,6 +59,7 @@ public class CelularApp implements MovementSensor {
 		
 	}
 
+	
 	@Override
 	public void walking() {
 		this.getModo().entrarAlEstacionamiento(this, patente);
