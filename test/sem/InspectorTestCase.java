@@ -44,7 +44,7 @@ class InspectorTestCase {
 
 		inspector.altaDeInfraccion("fd3-243");
 
-		verify(sem).registrarAltaDeInfraccion("fd3-243");
+		verify(sem).registrarAltaDeInfraccion("fd3-243",inspector,inspector.getAsignadoAZonaEstacionamiento());
 	}
 
 	@Test
@@ -60,7 +60,7 @@ class InspectorTestCase {
 
 		inspector.recorrerZonasDeEstacionamiento();
 
-		verify(sem, never()).registrarAltaDeInfraccion("s34-6h6");
+		verify(sem, never()).registrarAltaDeInfraccion("s34-6h6",inspector,inspector.getAsignadoAZonaEstacionamiento());
 	}
 
 	@Test
@@ -76,7 +76,7 @@ class InspectorTestCase {
 
 		inspector.recorrerZonasDeEstacionamiento();
 
-		verify(sem).registrarAltaDeInfraccion("134-456");
+		verify(sem).registrarAltaDeInfraccion("134-456",inspector,inspector.getAsignadoAZonaEstacionamiento());
 
 	}
 

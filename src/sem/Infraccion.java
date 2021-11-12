@@ -6,12 +6,12 @@ import java.time.LocalTime;
 public class Infraccion {
 	
 	private Inspector inspector;
-	private int patente;
+	private String patente;
 	private LocalDate fecha;
 	private LocalTime horario;
 	private ZonaDeEstacionamiento zonaDeEstacionamiento;
 	
-	public Infraccion(Inspector inspector, int patente, LocalDate fecha, LocalTime horario,
+	public Infraccion(Inspector inspector, String patente, LocalDate fecha, LocalTime horario,
 			ZonaDeEstacionamiento zonaDeEstacionamiento) {
 		super();
 		this.inspector = inspector;
@@ -25,7 +25,7 @@ public class Infraccion {
 		return inspector;
 	}
 
-	public int getPatente() {
+	public String getPatente() {
 		return patente;
 	}
 

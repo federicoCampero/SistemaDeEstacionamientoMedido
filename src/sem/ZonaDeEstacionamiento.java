@@ -29,7 +29,9 @@ public class ZonaDeEstacionamiento {
 	}
 	
 	
-	
+	public void registrarEstacionamiento(Estacionamiento estacionamiento) {
+		this.getEstacionamientosDeLaZona().add(estacionamiento);
+	}
 	
 	
 }

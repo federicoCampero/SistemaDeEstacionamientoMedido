@@ -44,7 +44,7 @@ public class Inspector {
 	 * @param patente
 	 */
 	public void altaDeInfraccion(String patente) {
-		sem.registrarAltaDeInfraccion(patente);
+		sem.registrarAltaDeInfraccion(patente, this ,this.getAsignadoAZonaEstacionamiento());
 
 	}
 
