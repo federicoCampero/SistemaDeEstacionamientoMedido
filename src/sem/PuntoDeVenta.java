@@ -15,28 +15,29 @@ public class PuntoDeVenta {
 		return sem;
 	}
 	
+	/**
+	 * envia un mensaje al sem para que registre el inicio del estacionamiento mediante compra puntual 
+	 * @param patente
+	 * @param cantidadHoras
+	 */
 	public void iniciarEstacionamiento(String patente, int cantidadHoras) {
 		
-		this.getSem().registrarEstacionamiento(this.crearEstacionamientoCompraPuntual(patente,cantidadHoras));
+		this.getSem().registrarInicioEstacionamientoCompraPuntual(patente,cantidadHoras);
 
 	}
-	
-	
 
-	private EstacionamientoCompraPuntual crearEstacionamientoCompraPuntual(String patente, int cantidadHoras) {
-		LocalTime horaInicio = LocalTime.now();
 
-		return new EstacionamientoCompraPuntual(patente,horaInicio,this.calcularHoraFinDelEstacionamiento(horaInicio,cantidadHoras),true,cantidadHoras);
-	}
-	
 
-	private LocalTime calcularHoraFinDelEstacionamiento(LocalTime horaInicio, int cantidadHoras) {			
-		return horaInicio.plusHours(cantidadHoras);
-	}
-
-	public void cargarCredito(CelularApp celularApp, double cantidad) {
+	/**
+	 * envia un mensaje al sem para que le carge credito al usuario, el credito quedara asocidado al numero del celular 
+	 * @param numeroDeCelular
+	 * @param cantidad
+	 */
+	public void cargarCredito(int numeroDeCelular, double cantidad) {
 		
-		
+		sem.registrarCargaDeCredito(numeroDeCelular,cantidad);
 	}
+	
+	
 
 }

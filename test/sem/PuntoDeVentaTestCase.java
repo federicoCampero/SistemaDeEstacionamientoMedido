@@ -26,7 +26,15 @@ class PuntoDeVentaTestCase {
 		
 		puntoDeVenta.iniciarEstacionamiento("1s1-223", 2);	
 		
-		verify(sem).registrarEstacionamiento(any(EstacionamientoCompraPuntual.class));
+		verify(sem).registrarInicioEstacionamientoCompraPuntual("1s1-223",2);
+	}
+	
+	@Test
+	void testCargarCreditoYSEMRegistrarLaCargaDeCredito() {
+		
+		puntoDeVenta.cargarCredito(43141321, 500d);
+		
+		verify(sem).registrarCargaDeCredito(43141321, 500d);
 	}
 
 	

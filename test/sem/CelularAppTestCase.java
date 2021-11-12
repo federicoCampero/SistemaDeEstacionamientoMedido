@@ -20,25 +20,25 @@ class CelularAppTestCase {
 		sem = mock(SEM.class);	
 		tipoDeModo = mock(TipoDeModo.class);
 		
-		celularApp = new CelularApp(sem,35443543,tipoDeModo,0d);
+		celularApp = new CelularApp(sem,35443543,tipoDeModo,"1s1-223");
 		
 	}
 
 	
 	@Test
-	void testIniciarEstacionamientoYSEMRegistraElEstacionamiento() {
+	void testIniciarEstacionamientoYAlSEMLelLegaELMensajeDeRegistrarElInicioDelEstacionamientoViaApp() {
 		
-		celularApp.iniciarEstacionamiento("1s1-223");	
+		celularApp.iniciarEstacionamiento();	
 		
-		verify(sem).registrarEstacionamiento(any(EstacionamientoMedianteApp.class));
+		verify(sem).registrarInicioEstacionamientoViaApp(celularApp.getNumero(),"1s1-223");
 	}
 	
 	@Test
-	void testFinalizarEstacionamientoYSEMTerminaLaVigenciaDelEstacionamiento() {
+	void testFinalizarEstacionamientoYAlSEMLelLegaELMensajeDeRegistrarElFinDelEstacionamientoViaApp() {
 		
 		celularApp.finalizarEstacionamiento();	
 		
-		verify(sem).terminarVigenciaDelEstacionamiento(celularApp.getNumero());
+		verify(sem).registrarFinEstacionamientoViaApp(celularApp.getNumero());
 	}
 
 
