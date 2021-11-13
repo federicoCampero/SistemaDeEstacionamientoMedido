@@ -14,9 +14,11 @@ public class EstacionamientoMedianteApp extends Estacionamiento {
 
 	public int getNumeroCelular() {
 		return numeroCelular;
+
 	}
 	
 	public void finalizarVigencia() {
 		this.setValidez(false);
+
 	}
 }
