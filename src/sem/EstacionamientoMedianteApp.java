@@ -1,35 +1,22 @@
 package sem;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class EstacionamientoMedianteApp extends Estacionamiento {
-	private String numeroCelular;
-	private LocalTime horaMaximaSegunCredito;
+	
+	private int numeroCelular;
 
-	public String getNumeroCelular() {
+	public EstacionamientoMedianteApp(String patente, LocalTime horaInicio, LocalTime horafin, boolean validez,
+			int numeroCelular) {
+		super(patente, horaInicio, horafin, validez);
+		this.numeroCelular = numeroCelular;
+	}
+
+	public int getNumeroCelular() {
 		return numeroCelular;
 	}
-
-	public void setNumeroCelular(String numeroCelular) {
-		this.numeroCelular = numeroCelular;
-	}
-
-	public LocalTime getHoraMaximaSegunCredito() {
-		return horaMaximaSegunCredito;
-	}
-
-	public void setHoraMaximaSegunCredito(LocalTime horaMaximaSegunCredito) {
-		this.horaMaximaSegunCredito = horaMaximaSegunCredito;
-	}
-
-	public EstacionamientoMedianteApp(String patente, LocalDate fechaInicio, boolean validez,
-			ZonaEstacionamiento zonaEstacimiento, String numeroCelular, LocalTime horaMaximaSegunCredito) {
-		super(patente, fechaInicio, validez, zonaEstacimiento);
-		this.numeroCelular = numeroCelular;
-		this.horaMaximaSegunCredito = horaMaximaSegunCredito;
-	}
-
 	
-
+	public void finalizarVigencia() {
+		this.setValidez(false);
+	}
 }

@@ -1,28 +1,19 @@
 package sem;
 
-import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class EstacionamientoCompraPuntual extends Estacionamiento{
-	private LocalDate fechaFin;
-	private int horasEstacionar;
 	
+	private int horasEstacionar;
+
+	public EstacionamientoCompraPuntual(String patente, LocalTime horaInicio, LocalTime horafin, boolean validez,
+			int horasEstacionar) {
+		super(patente, horaInicio, horafin, validez);
+		this.horasEstacionar = horasEstacionar;
+	}
+
 	public int getHorasEstacionar() {
 		return horasEstacionar;
-	}
-	public void setHorasEstacionar(int horasEstacionar) {
-		this.horasEstacionar = horasEstacionar;
-	}
-	public LocalDate getFechaFin() {
-		return fechaFin;
-	}
-	public void setFechaFin(LocalDate fechaFin) {
-		this.fechaFin = fechaFin;
-	}
-	public EstacionamientoCompraPuntual(String patente, LocalDate fechaInicio, boolean validez,
-			ZonaEstacionamiento zonaEstacimiento, LocalDate fechaFin, int horasEstacionar) {
-		super(patente, fechaInicio, validez, zonaEstacimiento);
-		this.fechaFin = fechaFin;
-		this.horasEstacionar = horasEstacionar;
 	}
 	
 	

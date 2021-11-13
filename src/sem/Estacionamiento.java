@@ -1,46 +1,51 @@
 package sem;
 
-import java.time.LocalDate;
+import java.time.LocalTime;
+import static java.time.temporal.ChronoUnit.HOURS;
 
 public abstract class Estacionamiento {
 	
 	private String patente;
-	private LocalDate fechaInicio;
+	private LocalTime horaInicio;
+	private LocalTime horafin;
 	private boolean validez;
-	private ZonaEstacionamiento zonaEstacimiento;
 	
+	public Estacionamiento(String patente, LocalTime horaInicio, LocalTime horafin, boolean validez) {
+		super();
+		this.patente = patente;
+		this.horaInicio = horaInicio;
+		this.horafin = horafin;
+		this.validez = validez;
+	}
+
 	public String getPatente() {
 		return patente;
 	}
-	public void setPatente(String patente) {
-		this.patente = patente;
-	}
-	public LocalDate getFechaInicio() {
-		return fechaInicio;
-	}
-	public Estacionamiento(String patente, LocalDate fechaInicio, boolean validez,
-			ZonaEstacionamiento zonaEstacimiento) {
-		this.patente = patente;
-		this.fechaInicio = fechaInicio;
-		this.validez = validez;
-		this.zonaEstacimiento = zonaEstacimiento;
+
+	public LocalTime getHoraInicio() {
+		return horaInicio;
 	}
 
-	public void setFechaInicio(LocalDate fechaInicio) {
-		this.fechaInicio = fechaInicio;
+	public LocalTime getHorafin() {
+		return horafin;
 	}
-	public boolean esValido() {
+
+	public boolean isValidez() {
 		return validez;
 	}
-	public void setValidez(boolean validez) {
+
+	protected void setValidez(boolean validez) {
 		this.validez = validez;
 	}
-	public ZonaEstacionamiento getZonaEstacimiento() {
-		return zonaEstacimiento;
+
+	public Long duracionEstacionamiento() {
+		return this.getHorafin().until(this.getHoraInicio(), HOURS);
 	}
-	public void setZonaEstacimiento(ZonaEstacionamiento zonaEstacimiento) {
-		this.zonaEstacimiento = zonaEstacimiento;
+	public Long costoEstacionamiento() {
+		return this.duracionEstacionamiento() * 40;
 	}
+	
+
 	
 	
 	
