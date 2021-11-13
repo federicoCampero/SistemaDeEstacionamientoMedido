@@ -2,6 +2,9 @@ package sem;
 
 import java.time.LocalTime;
 
+import static java.time.temporal.ChronoUnit.HOURS;
+
+
 public abstract class Estacionamiento {
 	
 	private String patente;
@@ -36,11 +39,13 @@ public abstract class Estacionamiento {
 	protected void setValidez(boolean validez) {
 		this.validez = validez;
 	}
-	
 
-	
-	
-	
-	
+
+	public Long duracionEstacionamiento() {
+		return this.getHorafin().until(this.getHoraInicio(), HOURS);
+	}
+	public Long costoEstacionamiento() {
+		return this.duracionEstacionamiento() * 40;
+	}
 	
 }

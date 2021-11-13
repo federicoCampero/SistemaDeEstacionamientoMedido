@@ -1,6 +1,5 @@
 package sem;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class EstacionamientoMedianteApp extends Estacionamiento {
@@ -15,12 +14,11 @@ public class EstacionamientoMedianteApp extends Estacionamiento {
 
 	public int getNumeroCelular() {
 		return numeroCelular;
+
 	}
 	
 	public void finalizarVigencia() {
 		this.setValidez(false);
+
 	}
-
-	
-
 }
