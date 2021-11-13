@@ -1,46 +1,43 @@
 package sem;
 
-import java.time.LocalDate;
+import java.time.LocalTime;
 
 public abstract class Estacionamiento {
 	
 	private String patente;
-	private LocalDate fechaInicio;
+	private LocalTime horaInicio;
+	private LocalTime horafin;
 	private boolean validez;
-	private ZonaEstacionamiento zonaEstacimiento;
 	
+	public Estacionamiento(String patente, LocalTime horaInicio, LocalTime horafin, boolean validez) {
+		super();
+		this.patente = patente;
+		this.horaInicio = horaInicio;
+		this.horafin = horafin;
+		this.validez = validez;
+	}
+
 	public String getPatente() {
 		return patente;
 	}
-	public void setPatente(String patente) {
-		this.patente = patente;
-	}
-	public LocalDate getFechaInicio() {
-		return fechaInicio;
-	}
-	public Estacionamiento(String patente, LocalDate fechaInicio, boolean validez,
-			ZonaEstacionamiento zonaEstacimiento) {
-		this.patente = patente;
-		this.fechaInicio = fechaInicio;
-		this.validez = validez;
-		this.zonaEstacimiento = zonaEstacimiento;
+
+	public LocalTime getHoraInicio() {
+		return horaInicio;
 	}
 
-	public void setFechaInicio(LocalDate fechaInicio) {
-		this.fechaInicio = fechaInicio;
+	public LocalTime getHorafin() {
+		return horafin;
 	}
-	public boolean esValido() {
+
+	public boolean isValidez() {
 		return validez;
 	}
-	public void setValidez(boolean validez) {
+
+	protected void setValidez(boolean validez) {
 		this.validez = validez;
 	}
-	public ZonaEstacionamiento getZonaEstacimiento() {
-		return zonaEstacimiento;
-	}
-	public void setZonaEstacimiento(ZonaEstacionamiento zonaEstacimiento) {
-		this.zonaEstacimiento = zonaEstacimiento;
-	}
+	
+
 	
 	
 	

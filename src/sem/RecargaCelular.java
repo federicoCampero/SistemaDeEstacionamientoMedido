@@ -14,6 +14,7 @@ public class RecargaCelular extends Compra {
 		this.monto = monto;
 		this.numeroCel = numeroCel;
 	}
+	
 	public double getMonto() {
 		return monto;
 	}
