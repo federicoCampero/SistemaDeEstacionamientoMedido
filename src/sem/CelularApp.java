@@ -31,19 +31,17 @@ public class CelularApp implements MovementSensor {
 	public void finalizarEstacionamiento() {
 		sem.registrarFinEstacionamientoViaApp(this);
 	}
+	
+	@Override
+	public void walking() {
+		this.getModo().entrarAlEstacionamiento(this);
+	}
 
 	@Override
 	public void driving() {
 		this.getModo().salirDelEstacionamiento(this);
-
 	}
 
-	@Override
-	public void walking() {
-		this.getModo().entrarAlEstacionamiento(this);
-
-	}
-		
 	// ASISTENCIA AL USUARIO
 	public void alertaIncioEstacionamiento() {
 		if(!sem.estacionamientoActivo(this.getPatente())) {
@@ -58,7 +56,6 @@ public class CelularApp implements MovementSensor {
 	
 	private String informarAlertaInicioEstacionamiento() {
 		return "Asegurese de inicar su estacionamiento";
-		
 	}
 	private String informarAlertaFinEstacionamiento() {
 		return "Asegurese de finalizar su estacionamiento";

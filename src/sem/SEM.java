@@ -29,16 +29,24 @@ public class SEM {
 	 */
 	
 	public void registrarInicioEstacionamientoViaApp(CelularApp celularApp, String patente) {
-		if(this.saldoSuficiente(celularApp.getNumero()) && !this.estacionamientoActivo(patente)) {
-			EstacionamientoMedianteApp nuevoEstacionamientoViaApp = this.crearEstacionamientoMedianteApp(celularApp.getNumero(), patente);
-			this.agregarEstacionamiento(nuevoEstacionamientoViaApp);
-			this.getZonasDeEstacionamientos().get(0).registrarEstacionamiento(nuevoEstacionamientoViaApp);
-			this.eventoInicioEstacionamientoViaApp(nuevoEstacionamientoViaApp);
-		} else {
-			this.informarSaldoInsuficiente();
+		if(this.estacionamientoActivo(patente)) {
+			this.informarEstacionamientoActivo();
+		}else {
+			if(!this.saldoSuficiente(celularApp.getNumero()) ) {
+				this.informarSaldoInsuficiente();
+			} else {
+				EstacionamientoMedianteApp nuevoEstacionamientoViaApp = this.crearEstacionamientoMedianteApp(celularApp.getNumero(), patente);
+				this.agregarEstacionamiento(nuevoEstacionamientoViaApp);
+				this.getZonasDeEstacionamientos().get(0).registrarEstacionamiento(nuevoEstacionamientoViaApp);
+				this.eventoInicioEstacionamientoViaApp(nuevoEstacionamientoViaApp);
+			}
 		}
 	}
 	
+	private String informarEstacionamientoActivo() {
+		return "Ya hay un estacionamiento activo";
+	}
+
 	// Finalizar estacionamiento
 	public void registrarFinEstacionamientoViaApp(CelularApp celularApp) {
 		if(this.estacionamientoActivo(celularApp.getPatente())) {
