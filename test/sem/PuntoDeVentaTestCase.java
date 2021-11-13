@@ -26,7 +26,7 @@ class PuntoDeVentaTestCase {
 		
 		puntoDeVenta.iniciarEstacionamiento("1s1-223", 2);	
 		
-		verify(sem).registrarInicioEstacionamientoCompraPuntual("1s1-223",2);
+		verify(sem).registrarInicioEstacionamientoCompraPuntual("1s1-223",2,puntoDeVenta);
 	}
 	
 	@Test

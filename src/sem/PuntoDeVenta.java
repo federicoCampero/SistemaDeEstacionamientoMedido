@@ -22,7 +22,7 @@ public class PuntoDeVenta {
 	 */
 	public void iniciarEstacionamiento(String patente, int cantidadHoras) {
 		
-		this.getSem().registrarInicioEstacionamientoCompraPuntual(patente,cantidadHoras);
+		this.getSem().registrarInicioEstacionamientoCompraPuntual(patente,cantidadHoras,this);
 
 	}
 

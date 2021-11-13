@@ -1,6 +1,8 @@
 package sem;
 
-public class modoAutomatico implements TipoDeModo {
+public class ModoAutomatico implements TipoDeModo {
+	
+	
 	
 	/**
 	 * el modoAutomatica es el encargado de disparar los mensajes de inicio y finalizacion del estacionamiento cuando el 

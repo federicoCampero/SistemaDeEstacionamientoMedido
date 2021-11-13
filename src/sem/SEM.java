@@ -3,13 +3,18 @@ package sem;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SEM {
 
 	private List<Estacionamiento> estacionamientos = new ArrayList<Estacionamiento>();
 	private List<ZonaDeEstacionamiento> zonasDeEstacionamientos = new ArrayList<ZonaDeEstacionamiento>();
 	private List<Infraccion> infracionesLabradas = new ArrayList<Infraccion>();
+	private List<Compra> comprasRealizadas = new ArrayList<Compra>();
+	
+	
 
 
 	public List<Estacionamiento> getEstacionamientos() {
@@ -35,6 +40,15 @@ public class SEM {
 	public void setInfracionesLabradas(List<Infraccion> infracionesLabradas) {
 		this.infracionesLabradas = infracionesLabradas;
 	}
+	
+	public List<Compra> getComprasRealizadas() {
+		return comprasRealizadas;
+	}
+
+	public void setComprasRealizadas(List<Compra> comprasRealizadas) {
+		this.comprasRealizadas = comprasRealizadas;
+	}
+
 
 	/**
 	 * registrar inicio de Estacionamiento via app, crea una instancia de
@@ -53,6 +67,10 @@ public class SEM {
 		this.agregarEstacionamiento(nuevoEstacionamientoViaApp);
 
 		this.getZonasDeEstacionamientos().get(0).registrarEstacionamiento(nuevoEstacionamientoViaApp);
+		
+		
+		
+		
 
 	}
 
@@ -87,7 +105,7 @@ public class SEM {
 	 * @param cantidadDeHoras cantidad de horas que le usuario va a permanecer en el
 	 *                        Estacionamiento
 	 */
-	public void registrarInicioEstacionamientoCompraPuntual(String patente, int cantidadDeHoras) {
+	public void registrarInicioEstacionamientoCompraPuntual(String patente, int cantidadDeHoras, PuntoDeVenta puntoDeVenta) {
 
 		EstacionamientoCompraPuntual nuevoEstacionamientoCompraPuntual = this.crearEstacionamientoCompraPuntual(patente,
 				cantidadDeHoras);
@@ -97,7 +115,17 @@ public class SEM {
 		this.getZonasDeEstacionamientos().get(0).registrarEstacionamiento(nuevoEstacionamientoCompraPuntual);
 		
 		
+		CompraPuntual nuevaCompraPuntual = this.crearCompraPuntoDeVenta(puntoDeVenta,cantidadDeHoras);
+		
+		this.agregarCompra(nuevaCompraPuntual);
 
+	}
+
+	private CompraPuntual crearCompraPuntoDeVenta(PuntoDeVenta puntoDeVenta, int cantidadDeHoras) {
+		LocalTime HoraDeCompra = LocalTime.now();
+		LocalDate fechaDeCompra = LocalDate.now();
+		
+		return new CompraPuntual(0,puntoDeVenta,fechaDeCompra,HoraDeCompra,cantidadDeHoras);
 	}
 
 	/**
@@ -113,6 +141,7 @@ public class SEM {
 
 		return new EstacionamientoCompraPuntual(patente, horaInicio,
 				this.calcularHoraFinDelEstacionamiento(horaInicio, cantidadHoras), true, cantidadHoras);
+		
 	}
 
 	/**
@@ -157,6 +186,8 @@ public class SEM {
 	}
 
 	public void registrarCargaDeCredito(int numeroDeCelular, double cantidad) {
+		
+		
 
 	}
 
@@ -164,4 +195,9 @@ public class SEM {
 		this.getEstacionamientos().add(estacionamiento);
 	}
 
+	public void agregarCompra(Compra compra) {
+		this.getComprasRealizadas().add(compra);
+	}
+
+	
 }

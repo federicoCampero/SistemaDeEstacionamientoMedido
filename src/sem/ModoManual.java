@@ -1,6 +1,6 @@
 package sem;
 
-public class modoManual implements TipoDeModo{
+public class ModoManual implements TipoDeModo{
 
 	/**
 	 * cuando el celularApp activa el modo manual, este no debe tener comportamiento ya que el 
@@ -10,12 +10,13 @@ public class modoManual implements TipoDeModo{
 	
 	@Override
 	public void entrarAlEstacionamiento(CelularApp celularApp) {
+		celularApp.alertaInicioEstacionamiento();
 		
 	}
 
 	@Override
 	public void salirDelEstacionamiento(CelularApp celularApp) {
-		
+		celularApp.alertaFinEstacionamiento();
 	}
 
 

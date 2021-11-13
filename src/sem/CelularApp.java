@@ -70,14 +70,21 @@ public class CelularApp implements MovementSensor {
 
 	@Override
 	public void driving() {
-		this.getModo().salirDelEstacionamiento(this);
+		if(sem.estacionamientoActivo(this.getPatente())) {
+			this.getModo().salirDelEstacionamiento(this);
+		}
+		
+		
 
 	}
 
 	@Override
 	public void walking() {
+		if(!sem.estacionamientoActivo(this.getPatente())) {
 		this.getModo().entrarAlEstacionamiento(this);
+		}
 
 	}
+
 
 }
