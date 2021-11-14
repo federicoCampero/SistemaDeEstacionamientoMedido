@@ -34,7 +34,7 @@ class InspectorTestCase {
 	}
 	
 	@Test
-	void testGetterYSetterDeLaVaribleSem() {
+	void testGetterYSetterDeLaVariableSem() {
 		
 		otroSem = mock(SEM.class);
 		
@@ -45,7 +45,7 @@ class InspectorTestCase {
 	}
 	
 	@Test
-	void testGetterYSetterDeLaVaribleAsignadoAZonaEstacionamiento() {
+	void testGetterYSetterDeLaVariableAsignadoAZonaEstacionamiento() {
 		
 		otraZonaDeEstacionamiento = mock(ZonaDeEstacionamiento.class);
 		

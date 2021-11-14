@@ -40,6 +40,26 @@ public class Infraccion {
 	public ZonaDeEstacionamiento getZonaDeEstacionamiento() {
 		return zonaDeEstacionamiento;
 	}
+
+	public void setInspector(Inspector inspector) {
+		this.inspector = inspector;
+	}
+
+	public void setPatente(String patente) {
+		this.patente = patente;
+	}
+
+	public void setFecha(LocalDate fecha) {
+		this.fecha = fecha;
+	}
+
+	public void setHorario(LocalTime horario) {
+		this.horario = horario;
+	}
+
+	public void setZonaDeEstacionamiento(ZonaDeEstacionamiento zonaDeEstacionamiento) {
+		this.zonaDeEstacionamiento = zonaDeEstacionamiento;
+	}
 	
 	
 

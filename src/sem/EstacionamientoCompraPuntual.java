@@ -15,6 +15,12 @@ public class EstacionamientoCompraPuntual extends Estacionamiento{
 	public int getHorasEstacionar() {
 		return horasEstacionar;
 	}
+
+	public void setHorasEstacionar(int horasEstacionar) {
+		this.horasEstacionar = horasEstacionar;
+	}
+
+	
 	
 	
 	

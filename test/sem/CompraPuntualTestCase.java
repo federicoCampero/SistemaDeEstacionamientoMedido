@@ -35,7 +35,7 @@ class CompraPuntualTestCase {
 	}
 	
 	@Test
-	void testGetterYSetterDeLaVaribleNumeroDeControl() {
+	void testGetterYSetterDeLaVariableNumeroDeControl() {
 		
 		compraPuntual.setNumeroControl(4);
 		
@@ -43,7 +43,7 @@ class CompraPuntualTestCase {
 	}
 	
 	@Test
-	void testGetterYSetterDeLaVaribleFechaDeCompra() {
+	void testGetterYSetterDeLaVariableFechaDeCompra() {
 		
 		otraFechaDeCompra = LocalDate.of(2021, 5, 2);
 		
@@ -53,7 +53,7 @@ class CompraPuntualTestCase {
 	}
 	
 	@Test
-	void testGetterYSetterDeLaVaribleHoraDeCompra() {
+	void testGetterYSetterDeLaVariableHoraDeCompra() {
 		
 		otroHoraDeCompra = LocalTime.of(18, 12, 01);
 		
@@ -63,7 +63,7 @@ class CompraPuntualTestCase {
 	}
 	
 	@Test
-	void testGetterYSetterDeLaVariblePuntoDeVenta() {
+	void testGetterYSetterDeLaVariablePuntoDeVenta() {
 		
 		otroPuntoDeVenta = mock(PuntoDeVenta.class);
 		
@@ -73,7 +73,7 @@ class CompraPuntualTestCase {
 	}
 	
 	@Test
-	void testGetterYSetterDeLaVaribleCantidadDeHoras() {
+	void testGetterYSetterDeLaVariableCantidadDeHoras() {
 		
 		compraPuntual.setCantidadHoras(6);
 		

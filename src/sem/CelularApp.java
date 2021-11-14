@@ -33,6 +33,11 @@ public class CelularApp implements MovementSensor {
 		sem.registrarFinEstacionamientoViaApp(this);
 	}
 	
+	/**
+	 *  cuando el SEM le quiere notificar de un evento  al celular, envia este mensaje
+	 * @param mensaje
+	 * @return
+	 */
 	public String notificarEventoEstacionamiento(String mensaje) {
 		return mensaje;
 	}

@@ -22,7 +22,7 @@ class PuntoDeVentaTestCase {
 	}
 
 	@Test
-	void testGetterYSetterDeLaVaribleSem() {
+	void testGetterYSetterDeLaVariableSem() {
 
 		otroSem = mock(SEM.class);
 

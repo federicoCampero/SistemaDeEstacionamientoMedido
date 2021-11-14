@@ -32,6 +32,20 @@ public class ZonaDeEstacionamiento {
 	public void registrarEstacionamiento(Estacionamiento estacionamiento) {
 		this.getEstacionamientosDeLaZona().add(estacionamiento);
 	}
+
+	public void setInspector(Inspector inspector) {
+		this.inspector = inspector;
+	}
+
+	public void setPuntosDeVenta(List<PuntoDeVenta> puntosDeVenta) {
+		this.puntosDeVenta = puntosDeVenta;
+	}
+
+	public void setEstacionamientosDeLaZona(List<Estacionamiento> estacionamientosDeLaZona) {
+		this.estacionamientosDeLaZona = estacionamientosDeLaZona;
+	}
+	
+	
 	
 	
 }

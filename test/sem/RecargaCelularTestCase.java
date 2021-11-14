@@ -32,7 +32,7 @@ class RecargaCelularTestCase {
 	}
 	
 	@Test
-	void testGetterYSetterDeLaVaribleMonto() {
+	void testGetterYSetterDeLaVariableMonto() {
 		
 		recargaCelular.setMonto(350d);
 		
