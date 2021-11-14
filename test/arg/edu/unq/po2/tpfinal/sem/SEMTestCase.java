@@ -173,9 +173,15 @@ class SEMTestCase {
 	}
 	void testSeDesuscribeUnaEntidadYaSubscrita() {
 		sem.suscripcionEntidad(iEntidad);
+		assertEquals(1, sem.getEntidadesSubscritas().size());
+		
 		sem.desuscripcionEntidad(iEntidad);
+		
 		assertEquals(0, sem.getEntidadesSubscritas().size());
+		
 	}
+	
+	
 	
 }
 

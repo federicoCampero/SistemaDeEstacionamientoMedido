@@ -44,7 +44,7 @@ class PuntoDeVentaTestCase {
 	}
 
 	@Test
-	void testUsarioEstaRegistradoYCargarCreditoYSEMRegistrarLaCargaDeCredito() {
+	void testUsarioEstaRegistradoYCargarCreditoYSEMRegistrarLaCargaDeCredito() throws Exception {
 
 		when(sem.estaRegistradoCelularApp(43141321)).thenReturn(true);
 
@@ -53,15 +53,5 @@ class PuntoDeVentaTestCase {
 		verify(sem).registrarCargaDeCredito(43141321, 500d, puntoDeVenta);
 	}
 
-	@Test
-	void testUsarioNoEstaRegistradoYNoPuedeCargarCreditoYSEMNoRegistraLaCargaDeCredito() {
-
-		when(sem.estaRegistradoCelularApp(43141321)).thenReturn(false);
-
-		puntoDeVenta.cargarCredito(43141321, 500d);
-
-		verify(sem, never()).registrarCargaDeCredito(43141321, 500d, puntoDeVenta);
-
-	}
 
 }

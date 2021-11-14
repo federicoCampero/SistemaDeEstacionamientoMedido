@@ -139,11 +139,11 @@ class CelularAppTestCase {
 	@Test
 	void testCelularAppConsultaSaldoAlSEM() {
 		
-		when(sem.consultaDeSaldoViaApp(celularApp.getNumero())).thenReturn("400d"); 
+		when(sem.consultaDeSaldoViaApp(celularApp.getNumero())).thenReturn(400d); 
 		
-		String mensajeConsultaDeSaldo = celularApp.consultarSaldo();
+		double mensajeConsultaDeSaldo = celularApp.consultarSaldo();
 		
-		assertEquals("400d", mensajeConsultaDeSaldo);
+		assertEquals(400d, mensajeConsultaDeSaldo);
 	}
 	
 	@Test
