@@ -24,7 +24,7 @@ class ModoManualTestCase {
 		modoManual.entrarAlEstacionamiento(celularApp);
 		
 		verify(celularApp, never()).iniciarEstacionamiento();
-		verify(celularApp).alertaInicioEstacionamiento();
+		verify(celularApp).alertaIncioEstacionamiento();
 	}
 	
 	@Test

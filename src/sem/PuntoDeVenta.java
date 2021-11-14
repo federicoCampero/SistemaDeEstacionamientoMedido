@@ -35,7 +35,7 @@ public class PuntoDeVenta {
 	 */
 	public void cargarCredito(int numeroDeCelular, double cantidad) {
 		
-		sem.registrarCargaDeCredito(numeroDeCelular,cantidad);
+		sem.registrarCargaDeCredito(numeroDeCelular,cantidad,this);
 	}
 	
 	

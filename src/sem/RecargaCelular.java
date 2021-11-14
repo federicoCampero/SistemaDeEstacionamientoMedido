@@ -5,11 +5,12 @@ import java.time.LocalTime;
 
 public class RecargaCelular extends Compra {
 	private double monto;
+	private int numeroCel;
 	
 	//Constructor
-	private String numeroCel;
+	
 	public RecargaCelular(int numeroControl, PuntoDeVenta puntoVenta, LocalDate fecha, LocalTime hora, double monto,
-			String numeroCel) {
+			int numeroCel) {
 		super(numeroControl, puntoVenta, fecha, hora);
 		this.monto = monto;
 		this.numeroCel = numeroCel;
@@ -21,10 +22,10 @@ public class RecargaCelular extends Compra {
 	public void setMonto(double monto) {
 		this.monto = monto;
 	}
-	public String getNumeroCel() {
+	public int getNumeroCel() {
 		return numeroCel;
 	}
-	public void setNumeroCel(String numeroCel) {
+	public void setNumeroCel(int numeroCel) {
 		this.numeroCel = numeroCel;
 	}
 }

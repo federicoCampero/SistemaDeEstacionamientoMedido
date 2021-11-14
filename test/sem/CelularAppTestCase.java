@@ -33,7 +33,7 @@ class CelularAppTestCase {
 		
 		celularApp.iniciarEstacionamiento();	
 		
-		verify(sem).registrarInicioEstacionamientoViaApp(celularApp.getNumero(),"1s1-223");
+		verify(sem).registrarInicioEstacionamientoViaApp(celularApp,"1s1-223");
 	}
 	
 	@Test
@@ -41,7 +41,7 @@ class CelularAppTestCase {
 		
 		celularApp.finalizarEstacionamiento();	
 		
-		verify(sem).registrarFinEstacionamientoViaApp(celularApp.getNumero());
+		verify(sem).registrarFinEstacionamientoViaApp(celularApp);
 	}
 
 

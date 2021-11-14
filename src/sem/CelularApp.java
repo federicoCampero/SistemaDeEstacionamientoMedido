@@ -22,7 +22,7 @@ public class CelularApp implements MovementSensor {
 	 */
 	public void iniciarEstacionamiento() {
 
-		sem.registrarInicioEstacionamientoViaApp(this.getNumero(), this.getPatente());
+		sem.registrarInicioEstacionamientoViaApp(this, this.getPatente());
 
 	}
 
@@ -30,7 +30,7 @@ public class CelularApp implements MovementSensor {
 	 * envia un mensaje al sem para que termine la vigencia del estacionamiento
 	 */
 	public void finalizarEstacionamiento() {
-		sem.registrarFinEstacionamientoViaApp(this.getNumero());
+		sem.registrarFinEstacionamientoViaApp(this);
 	}
 
 	@Override

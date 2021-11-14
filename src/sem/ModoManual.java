@@ -10,7 +10,7 @@ public class ModoManual implements TipoDeModo{
 	
 	@Override
 	public void entrarAlEstacionamiento(CelularApp celularApp) {
-		celularApp.alertaInicioEstacionamiento();
+		celularApp.alertaIncioEstacionamiento();
 		
 	}
 

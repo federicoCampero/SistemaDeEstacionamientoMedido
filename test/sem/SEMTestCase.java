@@ -37,4 +37,5 @@ class SEMTestCase {
 		
 		verify(sem).eventoInicioEstacionamientoViaApp(estacionamientoApp);
 	}
+	
 }

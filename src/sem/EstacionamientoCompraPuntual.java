@@ -20,4 +20,5 @@ public class EstacionamientoCompraPuntual extends Estacionamiento{
 	}
 	
 	
+	
 }

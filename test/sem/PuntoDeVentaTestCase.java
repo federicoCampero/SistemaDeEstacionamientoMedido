@@ -34,7 +34,7 @@ class PuntoDeVentaTestCase {
 		
 		puntoDeVenta.cargarCredito(43141321, 500d);
 		
-		verify(sem).registrarCargaDeCredito(43141321, 500d);
+		verify(sem).registrarCargaDeCredito(43141321, 500d,puntoDeVenta);
 	}
 
 	
