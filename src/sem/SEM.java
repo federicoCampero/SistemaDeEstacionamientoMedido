@@ -10,11 +10,12 @@ public class SEM {
 	
 	private List<Estacionamiento> estacionamientosApp = new ArrayList<Estacionamiento>();
 	private List<Estacionamiento> estacionamientosCompraPuntual = new ArrayList<Estacionamiento>();
-	
+	private List<Compra> comprasRealizadas = new ArrayList<Compra>();
 	private List<ZonaDeEstacionamiento> zonasDeEstacionamientos = new ArrayList<ZonaDeEstacionamiento>();
 	private List<Infraccion> infracionesLabradas = new ArrayList<Infraccion>();
 	private Map<Integer, Double> celularesCredito = new HashMap<Integer, Double>(); 
 	private List<IEntidad> entidadesSubscritas = new ArrayList<IEntidad>();
+	
 	
   // CREACION Y FINILAZACION DE ESTACIONAMIENTOS VIA APP
 	/**
@@ -249,23 +250,6 @@ public class SEM {
 	public void setEstacionamientosCompraPuntual(List<Estacionamiento> estacionamientosCompraPuntual) {
 		this.estacionamientosCompraPuntual = estacionamientosCompraPuntual;
 	}
-
-	public List<ZonaDeEstacionamiento> getZonasDeEstacionamientos() {
-		return zonasDeEstacionamientos;
-	}
-
-	public void setZonasDeEstacionamientos(List<ZonaDeEstacionamiento> zonasDeEstacionamientos) {
-		this.zonasDeEstacionamientos = zonasDeEstacionamientos;
-	}
-
-	public List<Infraccion> getInfracionesLabradas() {
-		return infracionesLabradas;
-	}
-
-	public void setInfracionesLabradas(List<Infraccion> infracionesLabradas) {
-		this.infracionesLabradas = infracionesLabradas;
-	}
-	
 	public List<Compra> getComprasRealizadas() {
 		return comprasRealizadas;
 	}
