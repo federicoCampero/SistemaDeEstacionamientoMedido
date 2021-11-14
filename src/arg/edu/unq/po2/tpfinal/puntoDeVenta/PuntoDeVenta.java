@@ -38,10 +38,9 @@ public class PuntoDeVenta {
 	 * 
 	 * @param numeroDeCelular
 	 * @param cantidad
+	 * @throws Exception 
 	 */
-	public void cargarCredito(int numeroCelular, double cantidad) {
-		if (sem.estaRegistradoCelularApp(numeroCelular)) {
+	public void cargarCredito(int numeroCelular, double cantidad) throws Exception {
 			sem.registrarCargaDeCredito(numeroCelular, cantidad, this);
-		}
 	}
 }

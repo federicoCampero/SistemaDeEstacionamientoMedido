@@ -52,7 +52,7 @@ public abstract class Estacionamiento {
 	}
 
 	public Long duracionEstacionamiento() {
-		return this.getHorafin().until(this.getHoraInicio(), HOURS);
+		return this.getHoraInicio().until(this.getHorafin(), HOURS);
 	}
 
 	public Long costoEstacionamiento() {

@@ -157,5 +157,6 @@ class CelularAppTestCase {
 		
 		assertEquals("Asegurese de finalizar su estacionamiento", celularApp.alertaFinEstacionamiento());
 	}
-
+	
+	
 }

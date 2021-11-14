@@ -61,7 +61,7 @@ public class CelularApp implements MovementSensor {
 	}
 	
 	// CONSULTAR SALDO
-	public String consultarSaldo() {
+	public double consultarSaldo() {
 		return sem.consultaDeSaldoViaApp(this.getNumero());
 	}
 	
