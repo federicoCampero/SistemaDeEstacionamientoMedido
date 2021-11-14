@@ -1,8 +1,5 @@
 package sem;
 
-
-import java.time.LocalDate;
-
 import java.time.LocalTime;
 
 public class EstacionamientoCompraPuntual extends Estacionamiento{

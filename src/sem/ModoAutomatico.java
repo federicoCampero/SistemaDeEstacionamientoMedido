@@ -12,13 +12,19 @@ public class ModoAutomatico implements TipoDeModo {
 
 	@Override
 	public void entrarAlEstacionamiento(CelularApp celularApp) {
-		celularApp.iniciarEstacionamiento();
-		
+		try {
+			celularApp.iniciarEstacionamiento();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-
 	@Override
 	public void salirDelEstacionamiento(CelularApp celularApp) {
-		celularApp.finalizarEstacionamiento();
+		try {
+			celularApp.finalizarEstacionamiento();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 

@@ -6,15 +6,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class SEM {
-
-	private List<Estacionamiento> estacionamientosApp = new ArrayList<Estacionamiento>();
-	private List<Estacionamiento> estacionamientosCompraPuntual = new ArrayList<Estacionamiento>();
-	private List<Compra> comprasRealizadas = new ArrayList<Compra>();
-	private List<ZonaDeEstacionamiento> zonasDeEstacionamientos = new ArrayList<ZonaDeEstacionamiento>();
-	private List<Infraccion> infracionesLabradas = new ArrayList<Infraccion>();
+	
+	private List<CelularApp> celularesApp = new ArrayList<CelularApp>();
 	private Map<Integer, Double> celularesCredito = new HashMap<Integer, Double>();
+	
+	
+	private List<EstacionamientoMedianteApp> estacionamientosApp = new ArrayList<EstacionamientoMedianteApp>();
+	private List<EstacionamientoCompraPuntual> estacionamientosCompraPuntual = new ArrayList<EstacionamientoCompraPuntual>();
+	private List<ZonaDeEstacionamiento> zonasDeEstacionamientos = new ArrayList<ZonaDeEstacionamiento>();
+	
+	private List<Compra> comprasRealizadas = new ArrayList<Compra>();
+	private List<Infraccion> infracionesLabradas = new ArrayList<Infraccion>();
+	
 	private List<IEntidad> entidadesSubscritas = new ArrayList<IEntidad>();
 
 	// CREACION Y FINILAZACION DE ESTACIONAMIENTOS VIA APP
@@ -28,20 +34,22 @@ public class SEM {
 	 * 
 	 * @param numeroCelular
 	 * @param patente
+	 * @throws Exception 
 	 */
-	public void registrarInicioEstacionamientoViaApp(CelularApp celularApp, String patente) {
+	public void registrarInicioEstacionamientoViaApp(CelularApp celularApp, String patente) throws Exception {
+		if (!this.estaRegistradoCelularApp(celularApp.getNumero())) {
+			throw new Exception("Su celular no esta registrado");
+		}
 		if (this.estacionamientoActivo(patente)) {
-			this.informarEstacionamientoActivo();
+			throw new Exception("Ya tiene un estacionamiento activo");
 		}
-		if (!this.saldoSuficiente(celularApp.getNumero())) {
-			this.informarSaldoInsuficiente();
-		} else {
-			EstacionamientoMedianteApp nuevoEstacionamientoViaApp = this
-					.crearEstacionamientoMedianteApp(celularApp.getNumero(), patente);
-			this.agregarEstacionamiento(nuevoEstacionamientoViaApp);
-			this.getZonasDeEstacionamientos().get(0).registrarEstacionamiento(nuevoEstacionamientoViaApp);
-			this.eventoInicioEstacionamientoViaApp(nuevoEstacionamientoViaApp);
+		if (!this.saldoSuficiente(celularApp)) {
+			throw new Exception("Su saldo es insuficiente para iniciar el estacionamiento");
 		}
+		EstacionamientoMedianteApp nuevoEstacionamientoViaApp = this.crearEstacionamientoMedianteApp(celularApp.getNumero(), patente);
+		this.agregarEstacionamientoViaApp(nuevoEstacionamientoViaApp);
+		this.getZonasDeEstacionamientos().get(0).registrarEstacionamiento(nuevoEstacionamientoViaApp);
+		this.eventoInicioEstacionamientoViaApp(celularApp, nuevoEstacionamientoViaApp);
 	}
 
 	/**
@@ -63,40 +71,62 @@ public class SEM {
 	}
 
 	// AGREGA LOS ESTACIONAMIENTOS APP
-	public void agregarEstacionamiento(Estacionamiento estacionamiento) {
-		this.getEstacionamientos().add(estacionamiento);
+	public void agregarEstacionamientoViaApp(EstacionamientoMedianteApp estacionamiento) {
+		this.getEstacionamientosViaApp().add(estacionamiento);
 	}
 
 	// Finalizar estacionamiento VIA APP
-	public void registrarFinEstacionamientoViaApp(CelularApp celularApp) {
-		if (this.estacionamientoActivo(celularApp.getPatente())) {
-			this.finalizarEstacionamientoEnSEM(celularApp.getPatente());
-			this.eventoFinEstacionamientoViaApp(celularApp.getPatente());
+	public void registrarFinEstacionamientoViaApp(CelularApp celularApp) throws Exception {
+		if (!this.estacionamientoActivo(celularApp.getPatente())) {
+			throw new Exception("No tienes un estacionamiento activo");
 		}
-	}
-
-	private String informarEstacionamientoActivo() {
-		return "Ya hay un estacionamiento activo";
+		this.finalizarEstacionamientoEnSEM(celularApp.getPatente());
+		this.eventoFinEstacionamientoViaApp(celularApp);
 	}
 
 	private void finalizarEstacionamientoEnSEM(String patente) {
-		Estacionamiento est = this.buscarEstacionamiento(patente);
-		this.getEstacionamientos().remove(est);
+		Estacionamiento est = this.buscarEstacionamientoViaApp(patente);
+		est.setValidez(false);
 	}
 
-	private Estacionamiento buscarEstacionamiento(String patente) {
-		return this.getEstacionamientos().stream().filter(estacionamiento -> estacionamiento.getPatente() == patente)
-				.findFirst().get();
+	private Estacionamiento buscarEstacionamientoViaApp(String patente) {
+		return this.getEstacionamientosViaApp().stream().filter(estacionamiento -> estacionamiento.getPatente() == patente).findFirst().get();
 	}
 
 	public boolean estacionamientoActivo(String patente) {
-		return this.getEstacionamientos().stream().anyMatch(estacionamiento -> estacionamiento.getPatente() == patente);
+		return this.getEstacionamientosViaApp().stream().anyMatch(estacionamiento -> estacionamiento.getPatente() == patente);
 	}
 
-	// X FRANJA HORARIA
+	// FINALIZAR X FRANJA HORARIA
 	public void finalizarEstacionamientosPorFinDeFranjaHoraria() {
+		this.finalizarTotalidadEstacionamientosViaApp();
+		this.finalizarTotalidadEstacionamientoCompraPuntual();
+		
 	}
-
+	private void finalizarTotalidadEstacionamientosViaApp() {
+		this.getEstacionamientosViaApp().stream().forEach(estacionamiento -> {
+			try {
+				this.registrarFinEstacionamientoViaApp(this.encontarCelularAppMedianteNumeroCelular(estacionamiento.getNumeroCelular()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+	}
+	
+	private CelularApp encontarCelularAppMedianteNumeroCelular(int numeroCelular) {
+		return this.getCelularApp().stream().filter(celularApp -> celularApp.getNumero() == numeroCelular).findFirst().get();
+	}
+	private void finalizarTotalidadEstacionamientoCompraPuntual() {
+		Stream<EstacionamientoCompraPuntual> estacionamientosActivos = this.getEstacionamientosCompraPuntual().stream().filter(compraPuntual -> compraPuntual.isValidez() == true);
+		estacionamientosActivos.forEach(estacionamiento -> this.finalizarEstacionamientoPorFinDeHorarioCompraPuntal(estacionamiento.getPatente()));
+	}
+	// FINALIZAR X HORA COMPRA PUNTUAL
+	public void finalizarEstacionamientoPorFinDeHorarioCompraPuntal(String patente) {
+		Estacionamiento estacionamiento = this.getEstacionamientosCompraPuntual().stream().filter(compraPuntal -> compraPuntal.getPatente() == patente).findFirst().get();
+		estacionamiento.setValidez(false);
+	}
+	
+	
 	// COMPRA PUNTUAL
 	/**
 	 * registrar inicio de Estacionamiento Compra Puntual, crea una instancia de
@@ -112,12 +142,17 @@ public class SEM {
 			PuntoDeVenta puntoDeVenta) {
 		EstacionamientoCompraPuntual nuevoEstacionamientoCompraPuntual = this.crearEstacionamientoCompraPuntual(patente,
 				cantidadDeHoras);
-		this.agregarEstacionamiento(nuevoEstacionamientoCompraPuntual);
+		this.agregarEstacionamientoCompraPuntual(nuevoEstacionamientoCompraPuntual);
 		this.getZonasDeEstacionamientos().get(0).registrarEstacionamiento(nuevoEstacionamientoCompraPuntual);
 
 		CompraPuntual nuevaCompraPuntual = this.crearCompraPuntoDeVenta(puntoDeVenta, cantidadDeHoras);
 
 		this.agregarCompra(nuevaCompraPuntual);
+	}
+
+	private void agregarEstacionamientoCompraPuntual(EstacionamientoCompraPuntual nuevoEstacionamientoCompraPuntual) {
+		this.getEstacionamientosCompraPuntual().add(nuevoEstacionamientoCompraPuntual);
+		
 	}
 
 	private CompraPuntual crearCompraPuntoDeVenta(PuntoDeVenta puntoDeVenta, int cantidadDeHoras) {
@@ -129,7 +164,6 @@ public class SEM {
 	}
 
 	private int encontrarSiguienteNumeroDeControl() {
-
 		return this.getComprasRealizadas().size();
 	}
 
@@ -160,31 +194,42 @@ public class SEM {
 		return horaInicio.plusHours(cantidadHoras);
 	}
 
-	// CARGAR CELULAR
-	private void registrarCelularApp(int numeroCelular) {
+	// REGRISTAR CELULAR
+	public void registrarCelularApp(CelularApp celularApp) {
+		this.getCelularApp().add(celularApp);
+	}
+	
+	public boolean estaRegistradoCelularApp(int numeroCelular) {
+		return this.getCelularApp().stream().anyMatch(celularApp -> celularApp.getNumero() == numeroCelular);
+	}
+
+	
+	// CARGAR CREDIO
+	public void registrarCargaDeCredito(int numeroCelular, double cantidad, PuntoDeVenta puntoDeVenta) {
+		
+		if(!this.getCelularesCredito().containsKey(numeroCelular)) {
+			this.registrarNumeroCelularYSaldo(numeroCelular);
+		}
+		
+		double creditoAnterior = this.getCelularesCredito().get(numeroCelular);
+		this.getCelularesCredito().put(numeroCelular, creditoAnterior + cantidad);
+
+		RecargaCelular nuevaRecargarDeCelular = this.crearCompraRecargaCelular(puntoDeVenta, cantidad, numeroCelular);
+		this.agregarCompra(nuevaRecargarDeCelular);
+	}
+
+	private void registrarNumeroCelularYSaldo(int numeroCelular) {
 		this.getCelularesCredito().put(numeroCelular, 0.0);
 	}
 
-	public void registrarCargaDeCredito(int numeroCelular, double cantidad, PuntoDeVenta puntoDeVenta) {
-			if(!this.getCelularesCredito().containsKey(numeroCelular)) {
-				this.registrarCelularApp(numeroCelular);
-			} else {
-				double creditoAnterior = this.getCelularesCredito().get(numeroCelular);
-				this.getCelularesCredito().put(numeroCelular, creditoAnterior + cantidad);
-			}
-			
-			
-			RecargaCelular nuevaRecargarDeCelular = this.crearCompraRecargaCelular(puntoDeVenta, cantidad,numeroCelular);
-			
-		}
-
 	private RecargaCelular crearCompraRecargaCelular(PuntoDeVenta puntoDeVenta, double cantidad, int numeroCelular) {
-		
+
 		LocalDate fechaDeRecarga = LocalDate.now();
 		LocalTime horaDeRecarga = LocalTime.now();
-		
-		RecargaCelular recargaCelular = new RecargaCelular(this.encontrarSiguienteNumeroDeControl(),puntoDeVenta,fechaDeRecarga,horaDeRecarga,cantidad,numeroCelular);
-		
+
+		RecargaCelular recargaCelular = new RecargaCelular(this.encontrarSiguienteNumeroDeControl(), puntoDeVenta,
+				fechaDeRecarga, horaDeRecarga, cantidad, numeroCelular);
+
 		return recargaCelular;
 	}
 
@@ -203,24 +248,28 @@ public class SEM {
 
 	// EVENTOS
 	// Evento 1
-	public void eventoInicioEstacionamientoViaApp(EstacionamientoMedianteApp nuevoEstacionamientoViaApp) {
-		nuevoEstacionamientoViaApp.getHoraInicio();
-		nuevoEstacionamientoViaApp.getHorafin();
-		
+	public void eventoInicioEstacionamientoViaApp(CelularApp celularApp,
+			EstacionamientoMedianteApp nuevoEstacionamientoViaApp) {
+		String horaInicio = nuevoEstacionamientoViaApp.getHoraInicio().toString();
+		String horaMaxima = nuevoEstacionamientoViaApp.getHorafin().toString();
+		celularApp.notificarEventoEstacionamiento(
+				"Estacionamiento realizado. Hora de inicio: " + horaInicio + "; Hora maxima: " + horaMaxima);
 	}
 
 	// Evento 2
-	private void eventoFinEstacionamientoViaApp(String patente) {
-		Estacionamiento est = this.buscarEstacionamiento(patente);
-		est.getHoraInicio();
-		est.getHorafin();
-		est.duracionEstacionamiento();
-		est.costoEstacionamiento();
+	private void eventoFinEstacionamientoViaApp(CelularApp celularApp) {
+		Estacionamiento estacionamiento = this.buscarEstacionamientoViaApp(celularApp.getPatente());
+		String horaInicio = estacionamiento.getHoraInicio().toString();
+		String horaFin = estacionamiento.getHorafin().toString();
+		String duracion = estacionamiento.duracionEstacionamiento().toString();
+		String costo = estacionamiento.costoEstacionamiento().toString();
+		celularApp.notificarEventoEstacionamiento("Estacionamiento finalizado. Hora de inicio: " + horaInicio
+				+ "; Hora de fin: " + horaFin + "; Duracion: " + duracion + "; Costo: " + costo);
 	}
 
 	// Evento 3 - Consulta de saldo
-	public void consultaDeSaldoViaApp(int numero) {
-		this.getCelularesCredito().get(numero);
+	public String consultaDeSaldoViaApp(int numeroCelular) {
+		return this.getCelularesCredito().get(numeroCelular).toString();
 	}
 
 	// SUSCRIPCION ENTIDAD
@@ -250,15 +299,15 @@ public class SEM {
 	 * @return
 	 */
 	public boolean tieneEstacionamientoVigente(String patente) {
-		return this.buscarEstacionamiento(patente).isValidez();
+		return this.buscarEstacionamientoViaApp(patente).isValidez();
 	}
 
-	private boolean saldoSuficiente(int numeroCelular) {
-		return this.getCelularesCredito().get(numeroCelular) > 20;
+	private double saldoDisponible(int numeroCelular) {
+		return this.getCelularesCredito().get(numeroCelular);
 	}
 
-	private String informarSaldoInsuficiente() {
-		return "Saldo insuficiente para realizar el inicio del Estacionamiento";
+	private boolean saldoSuficiente(CelularApp celularApp) {
+		return this.saldoDisponible(celularApp.getNumero()) > 40;
 	}
 
 	private void agregarCompra(Compra compra) {
@@ -266,11 +315,11 @@ public class SEM {
 	}
 
 	// Getters Setters
-	public List<Estacionamiento> getEstacionamientos() {
+	public List<EstacionamientoMedianteApp> getEstacionamientosViaApp() {
 		return estacionamientosApp;
 	}
 
-	public void setEstacionamientos(List<Estacionamiento> estacionamientos) {
+	public void setEstacionamientos(List<EstacionamientoMedianteApp> estacionamientos) {
 		this.estacionamientosApp = estacionamientos;
 	}
 
@@ -302,11 +351,11 @@ public class SEM {
 		this.entidadesSubscritas = entidadesSubscritas;
 	}
 
-	public List<Estacionamiento> getEstacionamientosCompraPuntual() {
+
+	public List<EstacionamientoCompraPuntual> getEstacionamientosCompraPuntual() {
 		return estacionamientosCompraPuntual;
 	}
-
-	public void setEstacionamientosCompraPuntual(List<Estacionamiento> estacionamientosCompraPuntual) {
+	public void setEstacionamientosCompraPuntual(List<EstacionamientoCompraPuntual> estacionamientosCompraPuntual) {
 		this.estacionamientosCompraPuntual = estacionamientosCompraPuntual;
 	}
 
@@ -316,5 +365,8 @@ public class SEM {
 
 	public void setComprasRealizadas(List<Compra> comprasRealizadas) {
 		this.comprasRealizadas = comprasRealizadas;
+	}
+	private List<CelularApp> getCelularApp() {
+		return celularesApp;
 	}
 }

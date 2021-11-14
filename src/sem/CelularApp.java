@@ -19,18 +19,22 @@ public class CelularApp implements MovementSensor {
 	 * sem debe validar el mismo dependiendo el saldo del usuario
 	 * 
 	 * @param patente
+	 * @throws Exception 
 	 */
-	public void iniciarEstacionamiento() {
-
+	public void iniciarEstacionamiento() throws Exception {
 		sem.registrarInicioEstacionamientoViaApp(this, this.getPatente());
-
 	}
 
 	/**
 	 * envia un mensaje al sem para que termine la vigencia del estacionamiento
+	 * @throws Exception 
 	 */
-	public void finalizarEstacionamiento() {
+	public void finalizarEstacionamiento() throws Exception {
 		sem.registrarFinEstacionamientoViaApp(this);
+	}
+	
+	public String notificarEventoEstacionamiento(String mensaje) {
+		return mensaje;
 	}
 
 	@Override
@@ -39,7 +43,6 @@ public class CelularApp implements MovementSensor {
 			this.getModo().salirDelEstacionamiento(this);
 		}
 	}
-
 	@Override
 	public void walking() {
 		if(!sem.estacionamientoActivo(this.getPatente())) {
@@ -47,17 +50,18 @@ public class CelularApp implements MovementSensor {
 		}
 
 	}
-
-	// ASISTENCIA AL USUARIO
-	public void alertaIncioEstacionamiento() {
-		if(!sem.estacionamientoActivo(this.getPatente())) {
-			this.informarAlertaInicioEstacionamiento();
-		}
+	
+	// CONSULTAR SALDO
+	public String consultarSaldo() {
+		return sem.consultaDeSaldoViaApp(this.getNumero());
 	}
-	public void alertaFinEstacionamiento() {
-		if(sem.estacionamientoActivo(this.getPatente())) {
-			this.informarAlertaFinEstacionamiento();
-		}
+	
+	// ASISTENCIA AL USUARIO
+	public String alertaIncioEstacionamiento() {
+		return this.informarAlertaInicioEstacionamiento();
+	}
+	public String alertaFinEstacionamiento() {
+		return this.informarAlertaFinEstacionamiento();
 	}
 	
 	private String informarAlertaInicioEstacionamiento() {
