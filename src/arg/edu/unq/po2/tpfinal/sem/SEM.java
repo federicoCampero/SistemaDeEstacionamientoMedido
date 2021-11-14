@@ -107,16 +107,16 @@ public class SEM {
 		if (!this.estacionamientoActivo(celularApp.getPatente())) {
 			throw new Exception("No tienes un estacionamiento activo");
 		}
-		this.finalizarEstacionamientoEnSEM(celularApp.getPatente());
+		this.finalizarEstacionamientoViaAppEnSEM(celularApp.getPatente());
 		this.eventoFinEstacionamientoViaApp(celularApp);
 	}
 
-	private void finalizarEstacionamientoEnSEM(String patente) {
-		Estacionamiento est = this.buscarEstacionamientoViaApp(patente);
+	private void finalizarEstacionamientoViaAppEnSEM(String patente) {
+		EstacionamientoMedianteApp est = this.buscarEstacionamientoViaApp(patente);
 		est.setValidez(false);
 	}
 
-	private Estacionamiento buscarEstacionamientoViaApp(String patente) {
+	EstacionamientoMedianteApp buscarEstacionamientoViaApp(String patente) {
 		return this.getEstacionamientosViaApp().stream().filter(estacionamiento -> estacionamiento.getPatente() == patente).findFirst().get();
 	}
 
@@ -149,8 +149,12 @@ public class SEM {
 	}
 	// FINALIZAR X HORA COMPRA PUNTUAL
 	public void finalizarEstacionamientoPorFinDeHorarioCompraPuntal(String patente) {
-		Estacionamiento estacionamiento = this.getEstacionamientosCompraPuntual().stream().filter(compraPuntal -> compraPuntal.getPatente() == patente).findFirst().get();
+		Estacionamiento estacionamiento = this.buscarEstacionamientoPorCompraPuntual(patente);
 		estacionamiento.setValidez(false);
+	}
+
+	EstacionamientoCompraPuntual buscarEstacionamientoPorCompraPuntual(String patente) {
+		return this.getEstacionamientosCompraPuntual().stream().filter(compraPuntal -> compraPuntal.getPatente() == patente).findFirst().get();
 	}
 	
 	
@@ -165,29 +169,25 @@ public class SEM {
 	 * @param cantidadDeHoras cantidad de horas que le usuario va a permanecer en el
 	 *                        Estacionamiento
 	 */
-	public void registrarInicioEstacionamientoCompraPuntual(String patente, int cantidadDeHoras,
-			PuntoDeVenta puntoDeVenta) {
-		EstacionamientoCompraPuntual nuevoEstacionamientoCompraPuntual = this.crearEstacionamientoCompraPuntual(patente,
-				cantidadDeHoras);
+	public void registrarInicioEstacionamientoCompraPuntual(String patente, int cantidadDeHoras,PuntoDeVenta puntoDeVenta) {
+		
+		EstacionamientoCompraPuntual nuevoEstacionamientoCompraPuntual = this.crearEstacionamientoCompraPuntual(patente,cantidadDeHoras);
 		this.agregarEstacionamientoCompraPuntual(nuevoEstacionamientoCompraPuntual);
-		this.getZonasDeEstacionamientos().get(0).registrarEstacionamiento(nuevoEstacionamientoCompraPuntual);
-
+		//this.getZonasDeEstacionamientos().get(0).registrarEstacionamiento(nuevoEstacionamientoCompraPuntual);
+		
 		CompraPuntual nuevaCompraPuntual = this.crearCompraPuntoDeVenta(puntoDeVenta, cantidadDeHoras);
-
 		this.agregarCompra(nuevaCompraPuntual);
 	}
 
 	private void agregarEstacionamientoCompraPuntual(EstacionamientoCompraPuntual nuevoEstacionamientoCompraPuntual) {
 		this.getEstacionamientosCompraPuntual().add(nuevoEstacionamientoCompraPuntual);
-		
 	}
 
 	private CompraPuntual crearCompraPuntoDeVenta(PuntoDeVenta puntoDeVenta, int cantidadDeHoras) {
 		LocalTime HoraDeCompra = LocalTime.now();
 		LocalDate fechaDeCompra = LocalDate.now();
 
-		return new CompraPuntual(this.encontrarSiguienteNumeroDeControl(), puntoDeVenta, fechaDeCompra, HoraDeCompra,
-				cantidadDeHoras);
+		return new CompraPuntual(this.encontrarSiguienteNumeroDeControl(), puntoDeVenta, fechaDeCompra, HoraDeCompra,cantidadDeHoras);
 	}
 
 	private int encontrarSiguienteNumeroDeControl() {
@@ -259,16 +259,13 @@ public class SEM {
 	}
 
 	// INFRACCIONES
-	public void registrarAltaDeInfraccion(String patente, Inspector inspector,
-			ZonaDeEstacionamiento zonaDeEstacionamiento) {
-		Infraccion nuevaInflaccion = new Infraccion(inspector, patente, LocalDate.now(), LocalTime.now(),
-				zonaDeEstacionamiento);
+	public void registrarAltaDeInfraccion(String patente, Inspector inspector, ZonaDeEstacionamiento zonaDeEstacionamiento) {
+		Infraccion nuevaInflaccion = new Infraccion(inspector, patente, LocalDate.now(), LocalTime.now(),zonaDeEstacionamiento);
 		this.agregarInfraccion(nuevaInflaccion);
 	}
 
 	private void agregarInfraccion(Infraccion infraccion) {
 		this.getInfracionesLabradas().add(infraccion);
-
 	}
 
 	// EVENTOS
@@ -294,7 +291,7 @@ public class SEM {
 	public double consultaDeSaldoViaApp(int numeroCelular) {
 		return this.getCelularesCredito().get(numeroCelular);
 	}
-
+	
 	// SUSCRIPCION ENTIDAD
 	public void suscripcionEntidad(IEntidad entidad) {
 		this.getEntidadesSubscritas().add(entidad);
@@ -312,7 +309,7 @@ public class SEM {
 		this.getEntidadesSubscritas().stream()
 				.forEach(entidad -> entidad.usuarioConPocoSaldoIniciaEstacionamiento(numeroCelular));
 	};
-
+	
 	// FUNCIONES AUX
 	/**
 	 * buscar al estacionamiento con una determinada patente y le pregunta si esta

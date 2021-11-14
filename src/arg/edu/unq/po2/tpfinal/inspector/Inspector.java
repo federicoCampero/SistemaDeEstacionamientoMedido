@@ -39,7 +39,6 @@ public class Inspector {
 	 * @return
 	 */
 	public boolean consultaEstacionamientoVigente(String patente) {
-
 		return sem.tieneEstacionamientoVigente(patente);
 	}
 	
@@ -49,7 +48,6 @@ public class Inspector {
 	 */
 	public void altaDeInfraccion(String patente) {
 		sem.registrarAltaDeInfraccion(patente, this ,this.getAsignadoAZonaEstacionamiento());
-
 	}
 
 	public void recorrerZonasDeEstacionamiento() {
