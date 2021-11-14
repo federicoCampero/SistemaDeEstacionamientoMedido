@@ -7,36 +7,58 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class PuntoDeVentaTestCase {
-	
+
 	PuntoDeVenta puntoDeVenta;
 	SEM sem;
+	SEM otroSem;
 
 	@BeforeEach
 	void setUp() throws Exception {
-		
-		sem = mock(SEM.class);	
-		
+
+		sem = mock(SEM.class);
+
 		puntoDeVenta = new PuntoDeVenta(sem);
-		
+
 	}
 
-	
 	@Test
-	void testIniciarEstacionamientoYSEMRegistraElEstacionamiento() {
-		
-		puntoDeVenta.iniciarEstacionamiento("1s1-223", 2);	
-		
-		verify(sem).registrarInicioEstacionamientoCompraPuntual("1s1-223",2,puntoDeVenta);
+	void testGetterYSetterDeLaVaribleSem() {
+
+		otroSem = mock(SEM.class);
+
+		puntoDeVenta.setSem(otroSem);
+
+		assertEquals(otroSem, puntoDeVenta.getSem());
+
 	}
-	
+
 	@Test
-	void testCargarCreditoYSEMRegistrarLaCargaDeCredito() {
-		
+	void testPuntoDeVentaIniciaElEstacionamientoYSEMRegistraElEstacionamiento() {
+
+		puntoDeVenta.iniciarEstacionamiento("1s1-223", 2);
+
+		verify(sem).registrarInicioEstacionamientoCompraPuntual("1s1-223", 2, puntoDeVenta);
+	}
+
+	@Test
+	void testUsarioEstaRegistradoYCargarCreditoYSEMRegistrarLaCargaDeCredito() {
+
+		when(sem.estaRegistradoCelularApp(43141321)).thenReturn(true);
+
 		puntoDeVenta.cargarCredito(43141321, 500d);
-		
-		verify(sem).registrarCargaDeCredito(43141321, 500d,puntoDeVenta);
+
+		verify(sem).registrarCargaDeCredito(43141321, 500d, puntoDeVenta);
 	}
 
-	
+	@Test
+	void testUsarioNoEstaRegistradoYNoPuedeCargarCreditoYSEMNoRegistraLaCargaDeCredito() {
+
+		when(sem.estaRegistradoCelularApp(43141321)).thenReturn(false);
+
+		puntoDeVenta.cargarCredito(43141321, 500d);
+
+		verify(sem, never()).registrarCargaDeCredito(43141321, 500d, puntoDeVenta);
+
+	}
 
 }

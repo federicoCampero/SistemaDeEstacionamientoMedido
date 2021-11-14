@@ -13,7 +13,9 @@ class InspectorTestCase {
 
 	Inspector inspector;
 	SEM sem;
+	SEM otroSem;
 	ZonaDeEstacionamiento zonaDeEstacionamiento;
+	ZonaDeEstacionamiento otraZonaDeEstacionamiento;
 	List<Estacionamiento> listaDeEstacionamiento;
 	Estacionamiento estacionamientoConInfraccion;
 	Estacionamiento estacionamientoSinInfracion;
@@ -29,6 +31,28 @@ class InspectorTestCase {
 		estacionamientoConInfraccion = mock(Estacionamiento.class);
 		estacionamientoSinInfracion = mock(Estacionamiento.class);
 
+	}
+	
+	@Test
+	void testGetterYSetterDeLaVaribleSem() {
+		
+		otroSem = mock(SEM.class);
+		
+		inspector.setSem(otroSem);
+		
+		assertEquals(otroSem, inspector.getSem());		
+		
+	}
+	
+	@Test
+	void testGetterYSetterDeLaVaribleAsignadoAZonaEstacionamiento() {
+		
+		otraZonaDeEstacionamiento = mock(ZonaDeEstacionamiento.class);
+		
+		inspector.setAsignadoAZonaEstacionamiento(otraZonaDeEstacionamiento);
+		
+		assertEquals(otraZonaDeEstacionamiento, inspector.getAsignadoAZonaEstacionamiento());		
+		
 	}
 
 	@Test

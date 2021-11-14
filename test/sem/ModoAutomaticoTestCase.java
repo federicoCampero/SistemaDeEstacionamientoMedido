@@ -23,7 +23,7 @@ class ModoAutomaticoTestCase {
 	}
 
 	@Test
-	void testModoAutomaticoEntraEntraAlEstacionamientoLeEnviaElMensajeAlCelularAppParaQueInicioElEstacionamiento() {
+	void testModoAutomaticoEntraEntraAlEstacionamientoLeEnviaElMensajeAlCelularAppParaQueInicioElEstacionamiento() throws Exception {
 		
 		modoAutomatico.entrarAlEstacionamiento(celularApp);
 		
@@ -31,7 +31,7 @@ class ModoAutomaticoTestCase {
 	}
 	
 	@Test
-	void testModoAutomaticoSaleDelEstacionamientoLeEnviaElMensajeAlCelularAppParaQueFinalizeElEstacionamiento() {
+	void testModoAutomaticoSaleDelEstacionamientoLeEnviaElMensajeAlCelularAppParaQueFinalizeElEstacionamiento() throws Exception {
 		
 		modoAutomatico.salirDelEstacionamiento(celularApp);
 		

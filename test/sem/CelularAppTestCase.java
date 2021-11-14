@@ -15,7 +15,9 @@ class CelularAppTestCase {
 
 	CelularApp celularApp;
 	SEM sem;
+	SEM otroSem;
 	TipoDeModo tipoDeModo;
+	TipoDeModo otroTipoDeModo;
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -23,13 +25,49 @@ class CelularAppTestCase {
 		sem = mock(SEM.class);	
 		tipoDeModo = mock(TipoDeModo.class);
 
-		celularApp = new CelularApp(sem,35443543,tipoDeModo,"1s1-223");
+		celularApp = new CelularApp(sem,11443543,tipoDeModo,"1s1-223");
 		
+	}
+	
+	@Test
+	void testGetterYSetterDeLaVaribleSem() {
+		
+		otroSem = mock(SEM.class);
+		
+		celularApp.setSem(otroSem);
+		
+		assertEquals(otroSem, celularApp.getSem());	
+	}
+	
+	@Test
+	void testGetterYSetterDeLaVaribleNumero() {
+	
+		celularApp.setNumero(11433593);
+		
+		assertEquals(11433593, celularApp.getNumero());	
+	}
+	
+	@Test
+	void testGetterYSetterDeLaVaribleModo() {
+		
+		otroTipoDeModo = mock(TipoDeModo.class);
+		
+		celularApp.setModo(otroTipoDeModo);
+		
+		assertEquals(otroTipoDeModo, celularApp.getModo());
+	}
+	
+	@Test
+	void testGetterYSetterDeLaVariblePatente() {
+		
+		celularApp.setPatente("f12-34k");
+		
+		assertEquals("f12-34k", celularApp.getPatente());	
 	}
 
 	
 	@Test
-	void testIniciarEstacionamientoYAlSEMLelLegaELMensajeDeRegistrarElInicioDelEstacionamientoViaApp() {
+	void testIniciarEstacionamientoYAlSEMLelLegaELMensajeDeRegistrarElInicioDelEstacionamientoViaApp() throws Exception {
 		
 		celularApp.iniciarEstacionamiento();	
 		
@@ -37,7 +75,7 @@ class CelularAppTestCase {
 	}
 	
 	@Test
-	void testFinalizarEstacionamientoYAlSEMLelLegaELMensajeDeRegistrarElFinDelEstacionamientoViaApp() {
+	void testFinalizarEstacionamientoYAlSEMLelLegaELMensajeDeRegistrarElFinDelEstacionamientoViaApp() throws Exception {
 		
 		celularApp.finalizarEstacionamiento();	
 		
