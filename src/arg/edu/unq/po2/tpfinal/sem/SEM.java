@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,6 +20,7 @@ import arg.edu.unq.po2.tpfinal.infraccion.Infraccion;
 import arg.edu.unq.po2.tpfinal.inspector.Inspector;
 import arg.edu.unq.po2.tpfinal.otros.IEntidad;
 import arg.edu.unq.po2.tpfinal.puntoDeVenta.PuntoDeVenta;
+import arg.edu.unq.po2.tpfinal.tiposDeModos.TipoDeModo;
 import arg.edu.unq.po2.tpfinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
 public class SEM {
@@ -35,8 +35,9 @@ public class SEM {
 	
 	private List<Compra> comprasRealizadas = new ArrayList<Compra>();
 	private List<Infraccion> infracionesLabradas = new ArrayList<Infraccion>();
-	
 	private List<IEntidad> entidadesSubscritas = new ArrayList<IEntidad>();
+	
+	private Map<CelularApp, TipoDeModo> celularTipoDeModo = new HashMap<CelularApp, TipoDeModo>();
 
 	// CREACION Y FINILAZACION DE ESTACIONAMIENTOS VIA APP
 	/**
@@ -235,6 +236,7 @@ public class SEM {
 	// REGRISTAR CELULAR
 	public void registrarCelularApp(CelularApp celularApp) {
 		this.getCelularApp().add(celularApp);
+		this.getCelularTipoDeModo().put(celularApp, celularApp.getModo());
 		this.registrarNumeroCelularYSaldo(celularApp.getNumero());
 	}
 	
@@ -350,6 +352,10 @@ public class SEM {
 	private void agregarCompra(Compra compra) {
 		this.getComprasRealizadas().add(compra);
 	}
+	
+	public void cambiarModoCelular(CelularApp celularApp) {
+		this.getCelularTipoDeModo().put(celularApp, celularApp.getModo());
+	}
 
 	// Getters Setters
 	public List<CelularApp> getCelularesApp() {
@@ -412,5 +418,13 @@ public class SEM {
 	}
 	private List<CelularApp> getCelularApp() {
 		return celularesApp;
+	}
+	
+	public Map<CelularApp, TipoDeModo> getCelularTipoDeModo() {
+		return celularTipoDeModo;
+	}
+
+	public void setCelularTipoDeModo(Map<CelularApp, TipoDeModo> celularTipoDeModo) {
+		this.celularTipoDeModo = celularTipoDeModo;
 	}
 }

@@ -27,7 +27,6 @@ public class ModoAutomatico implements TipoDeModo {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
-
+	
 }

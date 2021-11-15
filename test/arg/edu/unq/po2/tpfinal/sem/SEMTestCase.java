@@ -12,17 +12,15 @@ import arg.edu.unq.po2.tpfinal.inspector.Inspector;
 import arg.edu.unq.po2.tpfinal.otros.IEntidad;
 import arg.edu.unq.po2.tpfinal.puntoDeVenta.PuntoDeVenta;
 import arg.edu.unq.po2.tpfinal.sem.SEM;
+import arg.edu.unq.po2.tpfinal.tiposDeModos.ModoAutomatico;
+import arg.edu.unq.po2.tpfinal.tiposDeModos.ModoManual;
 import arg.edu.unq.po2.tpfinal.tiposDeModos.TipoDeModo;
 import arg.edu.unq.po2.tpfinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import java.time.LocalTime;
-import java.util.stream.Collector;
 
 class SEMTestCase {
 
@@ -35,6 +33,8 @@ class SEMTestCase {
 	Inspector inspector;
 	ZonaDeEstacionamiento zonaDeEstacionamiento;
 	IEntidad iEntidad;
+	ModoAutomatico tipoModoAutomatico;
+	ModoManual tipoModoManual;
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -48,14 +48,21 @@ class SEMTestCase {
 		inspector = mock(Inspector.class);
 		zonaDeEstacionamiento = mock(ZonaDeEstacionamiento.class);
 		iEntidad = mock(IEntidad.class);
+		tipoModoAutomatico = mock(ModoAutomatico.class);
+		tipoModoManual = mock(ModoManual.class);
 
 		when(celularApp.getPatente()).thenReturn("abc-123");
 		when(celularApp.getNumero()).thenReturn(12345);
+		when(celularApp.getModo()).thenReturn(tipoModoAutomatico);
+		
 		when(celularApp2.getPatente()).thenReturn("def-456");
 		when(celularApp2.getNumero()).thenReturn(67890);
+		when(celularApp2.getModo()).thenReturn(tipoModoManual);
+		
 		when(estacionamientoApp.getHoraInicio()).thenReturn(LocalTime.of(15, 0));
 		when(estacionamientoApp.getHorafin()).thenReturn(LocalTime.of(20, 0));
 		when(estacionamientoApp.getPatente()).thenReturn("abc-123");
+		
 
 	}
 
@@ -275,4 +282,25 @@ class SEMTestCase {
 		verify(iEntidad).cantidadEstacionamientosActivos(1);
 	}
 	
+	// TIPOS DE MODO
+	@Test 
+	void testUnCelularSeRegistraYSeGuardaEnElMapCelularTipoDeModo(){
+		sem.registrarCelularApp(celularApp);
+		assertEquals(1,sem.getCelularTipoDeModo().size());
+		assertEquals(tipoModoAutomatico, sem.getCelularTipoDeModo().get(celularApp));
+	}
+	@Test
+	void testUnCelularCambiaAModoManualYElSemLoRegistraCorrectamente() {
+		sem.registrarCelularApp(celularApp);
+		when(celularApp.getModo()).thenReturn(tipoModoManual);
+		sem.cambiarModoCelular(celularApp);
+		assertEquals(tipoModoManual, sem.getCelularTipoDeModo().get(celularApp));
+	}
+	@Test
+	void testUnCelularCambiaAModoAutomaticoYElSemLoRegistraCorrectamente() {
+		sem.registrarCelularApp(celularApp2);
+		when(celularApp2.getModo()).thenReturn(tipoModoAutomatico);
+		sem.cambiarModoCelular(celularApp);
+		assertEquals(tipoModoAutomatico, sem.getCelularTipoDeModo().get(celularApp));
+	}
 }

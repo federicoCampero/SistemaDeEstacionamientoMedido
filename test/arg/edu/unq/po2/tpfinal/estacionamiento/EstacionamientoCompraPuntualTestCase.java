@@ -1,7 +1,6 @@
 package arg.edu.unq.po2.tpfinal.estacionamiento;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 import java.time.LocalTime;
 

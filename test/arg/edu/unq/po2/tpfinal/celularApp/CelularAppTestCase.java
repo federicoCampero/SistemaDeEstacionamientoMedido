@@ -1,16 +1,15 @@
 package arg.edu.unq.po2.tpfinal.celularApp;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import arg.edu.unq.po2.tpfinal.celularApp.CelularApp;
 import arg.edu.unq.po2.tpfinal.sem.SEM;
+import arg.edu.unq.po2.tpfinal.tiposDeModos.ModoAutomatico;
+import arg.edu.unq.po2.tpfinal.tiposDeModos.ModoManual;
 import arg.edu.unq.po2.tpfinal.tiposDeModos.TipoDeModo;
+
 
 class CelularAppTestCase {
 
@@ -26,7 +25,7 @@ class CelularAppTestCase {
 		sem = mock(SEM.class);
 		tipoDeModo = mock(TipoDeModo.class);
 
-		celularApp = new CelularApp(sem, 11443543, tipoDeModo, "1s1-223");
+		celularApp = new CelularApp(sem, 11443543, "1s1-223");
 
 	}
 
@@ -158,5 +157,30 @@ class CelularAppTestCase {
 		assertEquals("Asegurese de finalizar su estacionamiento", celularApp.alertaFinEstacionamiento());
 	}
 	
+	// CAMBIOS DE MODO
+	@Test
+	void testCelularAppEmpiezaConUnModoManual() {
+		assertEquals(ModoManual.class, celularApp.getModo().getClass());
+	}
 	
+	@Test
+	void testCelularAppCambiaAModoAutomatico() throws Exception {
+		celularApp.cambiarAModoAutomatico();
+		assertEquals(ModoAutomatico.class, celularApp.getModo().getClass());
+	}
+	@Test
+	void testCelularAppCambiaAModoManual() throws Exception {
+		celularApp.cambiarAModoAutomatico();
+		celularApp.cambiarAModoManual();
+		assertEquals(ModoManual.class, celularApp.getModo().getClass());
+	}
+	@Test
+	void testCelularEnModoManualDeclaraExceptionCuandoQuiereCambiarAlMismoModo() throws Exception {
+		assertThrows(Exception.class, () -> celularApp.cambiarAModoManual());
+	}
+	@Test
+	void testCelularEnModoAutomaticoDeclaraExceptionCuandoQuiereCambiarAlMismoModo() throws Exception {
+		celularApp.cambiarAModoAutomatico();
+		assertThrows(Exception.class, () -> celularApp.cambiarAModoAutomatico());
+	}
 }

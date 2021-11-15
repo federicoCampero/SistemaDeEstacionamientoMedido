@@ -2,20 +2,21 @@ package arg.edu.unq.po2.tpfinal.celularApp;
 
 import arg.edu.unq.po2.tpfinal.otros.MovementSensor;
 import arg.edu.unq.po2.tpfinal.sem.SEM;
+import arg.edu.unq.po2.tpfinal.tiposDeModos.ModoAutomatico;
+import arg.edu.unq.po2.tpfinal.tiposDeModos.ModoManual;
 import arg.edu.unq.po2.tpfinal.tiposDeModos.TipoDeModo;
 
 public class CelularApp implements MovementSensor {
 
 	private SEM sem;
 	private int numero;
-	private TipoDeModo modo;
+	private TipoDeModo modo = new ModoManual();
 	private String patente;
 
-	public CelularApp(SEM sem, int numero, TipoDeModo modo, String patente) {
+	public CelularApp(SEM sem, int numero, String patente) {
 		super();
 		this.sem = sem;
 		this.numero = numero;
-		this.modo = modo;
 		this.patente = patente;
 	}
   /**
@@ -45,7 +46,22 @@ public class CelularApp implements MovementSensor {
 	public String notificarEventoEstacionamiento(String mensaje) {
 		return mensaje;
 	}
-
+	public void cambiarAModoAutomatico() throws Exception {
+		if(this.getModo().getClass() == ModoAutomatico.class) {
+			throw new Exception("YA se encuentra en modo automatico");
+		}
+		this.setModo(new ModoAutomatico());
+		sem.cambiarModoCelular(this);
+	}
+	
+	public void cambiarAModoManual() throws Exception {
+		if(this.getModo().getClass() == ModoManual.class) {
+			throw new Exception("YA se encuentra en modo manual");
+		}
+		this.setModo(new ModoManual());
+		sem.cambiarModoCelular(this);
+	}
+	
 	@Override
 	public void driving() {
 		if(sem.estacionamientoActivo(this.getPatente())) {
