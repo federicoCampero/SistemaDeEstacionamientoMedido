@@ -352,7 +352,7 @@ public class SEM {
 		String horaMaxima = nuevoEstacionamientoViaApp.getHorafin().toString();
 		celularApp.notificarEventoEstacionamiento(
 				"Estacionamiento realizado. Hora de inicio: " + horaInicio + "; Hora maxima: " + horaMaxima);
-	}
+	} 
 
 	/**
 	 * Notifica al celularApp el fin de un estacionamiento via app
