@@ -86,9 +86,9 @@ class CelularAppTestCase {
 	void testCelularAppLeLLegaElMensajeDrivingYElEstacionamientoEstaActivo() {
 
 		when(sem.estacionamientoActivo("1s1-223")).thenReturn(true);
-
+		celularApp.setModo(tipoDeModo);
 		celularApp.driving();
-
+		
 		verify(tipoDeModo).salirDelEstacionamiento(celularApp);
 
 	}
@@ -97,7 +97,7 @@ class CelularAppTestCase {
 	void testCelularAppLeLLegaElMensajeDrivingYElEstacionamientoNoEstaActivo() {
 
 		when(sem.estacionamientoActivo("1s1-223")).thenReturn(false);
-
+		celularApp.setModo(tipoDeModo);
 		celularApp.driving();
 
 		verify(tipoDeModo, never()).salirDelEstacionamiento(celularApp);
@@ -108,7 +108,7 @@ class CelularAppTestCase {
 	void testCelularAppLeLLegaElMensajeWalkingYElEstacionamientoNoEstaActivo() {
 
 		when(sem.estacionamientoActivo("1s1-223")).thenReturn(false);
-
+		celularApp.setModo(tipoDeModo);
 		celularApp.walking();
 
 		verify(tipoDeModo).entrarAlEstacionamiento(celularApp);
