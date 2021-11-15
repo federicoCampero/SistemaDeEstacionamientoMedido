@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import arg.edu.unq.po2.tpfinal.celularApp.CelularApp;
@@ -54,7 +56,7 @@ public class SEM {
 		this.verificarRegistroCelularApp(celularApp);
 		this.verificarEstacionamientoActivo(patente);
 		this.verificarSaldoSuficienteParaIniciarEstacionamientoViaApp(celularApp);
-		
+		this.verificarYNotificarSobreUsuarioConPocoSaldo(celularApp);
 		EstacionamientoMedianteApp nuevoEstacionamientoViaApp = this.crearEstacionamientoMedianteApp(celularApp.getNumero(), patente);
 		this.agregarEstacionamientoViaApp(nuevoEstacionamientoViaApp);
 		//this.getZonasDeEstacionamientos().get(0).registrarEstacionamiento(nuevoEstacionamientoViaApp);
@@ -121,7 +123,7 @@ public class SEM {
 	}
 
 	public boolean estacionamientoActivo(String patente) {
-		return this.getEstacionamientosViaApp().stream().anyMatch(estacionamiento -> estacionamiento.getPatente() == patente);
+		return this.getEstacionamientosViaApp().stream().anyMatch(estacionamiento -> estacionamiento.getPatente() == patente && estacionamiento.isValidez());
 	}
 
 	// FINALIZAR X FRANJA HORARIA
@@ -130,8 +132,10 @@ public class SEM {
 		this.finalizarTotalidadEstacionamientoCompraPuntual();
 		
 	}
-	private void finalizarTotalidadEstacionamientosViaApp() {
-		this.getEstacionamientosViaApp().stream().forEach(estacionamiento -> {
+	void finalizarTotalidadEstacionamientosViaApp() {
+		List<EstacionamientoMedianteApp> estacionamientosActivos = this.totalidadDeEstacionamientosActivosViaApp();
+		
+		estacionamientosActivos.stream().forEach(estacionamiento -> {
 			try {
 				this.registrarFinEstacionamientoViaApp(this.encontarCelularAppMedianteNumeroCelular(estacionamiento.getNumeroCelular()));
 			} catch (Exception e) {
@@ -139,11 +143,18 @@ public class SEM {
 			}
 		});
 	}
+
+	List<EstacionamientoMedianteApp> totalidadDeEstacionamientosActivosViaApp() {
+		return this.getEstacionamientosViaApp().stream().filter(est -> est.isValidez()).collect(Collectors.toList());
+	}
+	List<EstacionamientoCompraPuntual> totalidadDeEstacionamientosActivosCompraPuntual() {
+		return this.getEstacionamientosCompraPuntual().stream().filter(est -> est.isValidez()).collect(Collectors.toList());
+	}
 	
 	private CelularApp encontarCelularAppMedianteNumeroCelular(int numeroCelular) {
 		return this.getCelularApp().stream().filter(celularApp -> celularApp.getNumero() == numeroCelular).findFirst().get();
 	}
-	private void finalizarTotalidadEstacionamientoCompraPuntual() {
+	void finalizarTotalidadEstacionamientoCompraPuntual() {
 		Stream<EstacionamientoCompraPuntual> estacionamientosActivos = this.getEstacionamientosCompraPuntual().stream().filter(compraPuntual -> compraPuntual.isValidez() == true);
 		estacionamientosActivos.forEach(estacionamiento -> this.finalizarEstacionamientoPorFinDeHorarioCompraPuntal(estacionamiento.getPatente()));
 	}
@@ -300,14 +311,20 @@ public class SEM {
 	public void desuscripcionEntidad(IEntidad entidad) {
 		this.getEntidadesSubscritas().remove(entidad);
 	}
-
-	public void informarEntidadesCantidadEstacionamientosActivos() {
-		this.getEntidadesSubscritas().stream().forEach(entidad -> entidad.cantidadEstacionamientosActivos());
+	
+	void verificarYNotificarSobreUsuarioConPocoSaldo(CelularApp celularApp) {
+		if(this.consultaDeSaldoViaApp(celularApp.getNumero()) == 40d) {
+			this.informarEntidadesUsuarioConPocoSaldoIniciaEstacionamiento(celularApp.getNumero());
+		}
 	}
 
+	public void informarEntidadesCantidadEstacionamientosActivos() {
+		int cantidadEstacionamientos = this.totalidadDeEstacionamientosActivosViaApp().size() + this.totalidadDeEstacionamientosActivosCompraPuntual().size();
+		this.getEntidadesSubscritas().stream().forEach(entidad -> entidad.cantidadEstacionamientosActivos(cantidadEstacionamientos));
+	}
+	
 	public void informarEntidadesUsuarioConPocoSaldoIniciaEstacionamiento(int numeroCelular) {
-		this.getEntidadesSubscritas().stream()
-				.forEach(entidad -> entidad.usuarioConPocoSaldoIniciaEstacionamiento(numeroCelular));
+		this.getEntidadesSubscritas().stream().forEach(entidad -> entidad.usuarioConPocoSaldoIniciaEstacionamiento(numeroCelular));
 	};
 	
 	// FUNCIONES AUX
@@ -327,7 +344,7 @@ public class SEM {
 	}
 
 	private boolean saldoSuficiente(CelularApp celularApp) {
-		return this.saldoDisponible(celularApp.getNumero()) >= 40;
+		return this.saldoDisponible(celularApp.getNumero()) >= 40d;
 	}
 
 	private void agregarCompra(Compra compra) {

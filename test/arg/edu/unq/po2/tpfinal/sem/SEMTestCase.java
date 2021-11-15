@@ -22,11 +22,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import java.time.LocalTime;
+import java.util.stream.Collector;
 
 class SEMTestCase {
 
 	SEM sem;
 	CelularApp celularApp;
+	CelularApp celularApp2;
 	TipoDeModo tipoDeModo;
 	EstacionamientoMedianteApp estacionamientoApp;
 	PuntoDeVenta puntoDeVenta;
@@ -40,6 +42,7 @@ class SEMTestCase {
 		sem = new SEM();
 		tipoDeModo = mock(TipoDeModo.class);
 		celularApp = mock(CelularApp.class);
+		celularApp2 = mock(CelularApp.class);
 		estacionamientoApp = mock(EstacionamientoMedianteApp.class);
 		puntoDeVenta = mock(PuntoDeVenta.class);
 		inspector = mock(Inspector.class);
@@ -48,6 +51,8 @@ class SEMTestCase {
 
 		when(celularApp.getPatente()).thenReturn("abc-123");
 		when(celularApp.getNumero()).thenReturn(12345);
+		when(celularApp2.getPatente()).thenReturn("def-456");
+		when(celularApp2.getNumero()).thenReturn(67890);
 		when(estacionamientoApp.getHoraInicio()).thenReturn(LocalTime.of(15, 0));
 		when(estacionamientoApp.getHorafin()).thenReturn(LocalTime.of(20, 0));
 		when(estacionamientoApp.getPatente()).thenReturn("abc-123");
@@ -94,7 +99,22 @@ class SEMTestCase {
 
 		assertFalse(estacionamiento.isValidez());
 	}
-	
+
+	// FINALIZAR TOTALIDAD ESTACIONAMIENTOS VIA APP
+	@Test
+	void testSeFinalizanCorrectamenteTodosLosEstacionamientosViaApp() throws Exception {
+		sem.registrarCelularApp(celularApp);
+		sem.registrarCelularApp(celularApp2);
+		sem.registrarCargaDeCredito(celularApp.getNumero(), 40d, puntoDeVenta);
+		sem.registrarCargaDeCredito(celularApp2.getNumero(), 40d, puntoDeVenta);
+		sem.registrarInicioEstacionamientoViaApp(celularApp, celularApp.getPatente());
+		sem.registrarInicioEstacionamientoViaApp(celularApp2, celularApp2.getPatente());
+		
+		sem.finalizarTotalidadEstacionamientosViaApp();
+		Boolean resultadoDeValidez = sem.getEstacionamientosViaApp().stream().allMatch(estacionamientos -> estacionamientos.isValidez() == false);
+		
+		assertTrue(resultadoDeValidez);
+	}
 
 	// INICAR ESTACIONAMIENTO DESDE PUNTO DE VENTA
 	@Test
@@ -104,19 +124,75 @@ class SEMTestCase {
 		assertEquals(1, sem.getEstacionamientosCompraPuntual().size());
 		assertEquals(1, sem.getComprasRealizadas().size());
 	}
+
 	// FINALIZAR ESTACIONAMIENTO POR HORARIO PUNTO DE VENTA
 	@Test
 	void testSeFinalizaUnEstacionamientoPorCompraPuntalCorrectamente() {
 		sem.registrarInicioEstacionamientoCompraPuntual("abc-123", 4, puntoDeVenta);
 		sem.finalizarEstacionamientoPorFinDeHorarioCompraPuntal("abc-123");
-		
+
 		EstacionamientoCompraPuntual estacionamiento = sem.buscarEstacionamientoPorCompraPuntual("abc-123");
-		
+
 		assertFalse(estacionamiento.isValidez());
+	}
+	// FINALIZAR TOTALIDAD ESTACIONAMIENTOS PUNTO DE VENTA
+	@Test
+	void testSeFinalizanCorrectamenteLaTotalidadDeLosEstacionamientosDePuntoDeVenta() {
+		
+		sem.registrarCelularApp(celularApp);
+		sem.registrarInicioEstacionamientoCompraPuntual("abc-123", 4, puntoDeVenta);
+		sem.registrarInicioEstacionamientoCompraPuntual("abc-124", 4, puntoDeVenta);
+		sem.finalizarTotalidadEstacionamientoCompraPuntual();
+		
+		Boolean resultadoDeValidez = sem.getEstacionamientosCompraPuntual().stream().allMatch(estacionamientos -> estacionamientos.isValidez() == false);
+		
+		assertTrue(resultadoDeValidez);
 	}
 	
 	
-	// TEST CARGA CELULAR EN SEM
+	// FINALIZAR POR FRANJA HORARIA
+	@Test
+	void testSeRealizaCorrectamenteLaFinalizacionDeTodosLosEstacionamientosPorFranjaHoraria() throws Exception {
+		sem.registrarCelularApp(celularApp);
+		sem.registrarInicioEstacionamientoCompraPuntual("abc-123", 4, puntoDeVenta);
+		sem.registrarCargaDeCredito(celularApp.getNumero(), 40d, puntoDeVenta);
+		sem.registrarInicioEstacionamientoViaApp(celularApp, celularApp.getPatente());
+		
+		sem.finalizarEstacionamientosPorFinDeFranjaHoraria();
+		
+		Boolean resultadoDeValidezCP = sem.getEstacionamientosCompraPuntual().stream().allMatch(estacionamientos -> estacionamientos.isValidez() == false);
+		Boolean resultadoDeValidezVA = sem.getEstacionamientosViaApp().stream().allMatch(estacionamientos -> estacionamientos.isValidez() == false);
+		
+		assertTrue(resultadoDeValidezCP);
+		assertTrue(resultadoDeValidezVA);
+	}
+	// BUSCAR TOTALIDAD DE ESTACIONAMIENTOS ACTIVOS
+	@Test
+	void testElSemEncuentraCorrectamenteLaTotalidadDeLosEstacionamientosActivos() throws Exception {
+		sem.registrarCelularApp(celularApp);
+		sem.registrarCelularApp(celularApp2);
+		sem.registrarCargaDeCredito(celularApp.getNumero(), 40d, puntoDeVenta);
+		sem.registrarCargaDeCredito(celularApp2.getNumero(), 40d, puntoDeVenta);
+		sem.registrarInicioEstacionamientoViaApp(celularApp, celularApp.getPatente());
+		sem.registrarInicioEstacionamientoViaApp(celularApp, celularApp2.getPatente());
+		
+		assertEquals(sem.getCelularesApp().size(), sem.totalidadDeEstacionamientosActivosViaApp().size());
+	}
+	
+	// BUSCAR ESTACIONAMIENTO MEDIANTE NUMERO DE TELEFONO
+	@Test
+	void testElSemEncuentraCorrectamenteElEstacionamientoMedianteElNumeroDeTelefono() throws Exception {
+		
+		sem.registrarCelularApp(celularApp);
+		sem.registrarCargaDeCredito(celularApp.getNumero(), 40d, puntoDeVenta);
+		sem.registrarInicioEstacionamientoViaApp(celularApp, celularApp.getPatente());
+		EstacionamientoMedianteApp estacionamiento = sem.buscarEstacionamientoViaApp(celularApp.getPatente());
+		
+		assertTrue(sem.getEstacionamientosViaApp().contains(estacionamiento));
+	
+	}
+
+	// CARGA CELULAR EN SEM
 	@Test
 	void testUnCelularSeRegistraEnElSemYTieneSaldoCero() {
 		sem.registrarCelularApp(celularApp);
@@ -155,49 +231,48 @@ class SEMTestCase {
 		verify(celularApp).notificarEventoEstacionamiento(
 				"Estacionamiento finalizado. Hora de inicio: 15:00; Hora de fin: 20:00; Duracion: 0; Costo: 0");
 	}
-	
+
 	// INFRACCION
 	@Test
 	void testSeCreaCorrectamenteUnaInfraccion() {
 		sem.agregarEstacionamientoViaApp(estacionamientoApp);
 		sem.registrarAltaDeInfraccion("abc-123", inspector, zonaDeEstacionamiento);
-		
+
 		assertEquals(1, sem.getInfracionesLabradas().size());
 	}
-	
+
 	// SUBSCRIPCION/DESUSCRIPCION DE ENTIDADES
 	@Test
 	void testSeSubscribeUnaNuevaEntidadAlSem() {
 		sem.suscripcionEntidad(iEntidad);
 		assertEquals(1, sem.getEntidadesSubscritas().size());
 	}
+
+	@Test
 	void testSeDesuscribeUnaEntidadYaSubscrita() {
-		sem.suscripcionEntidad(iEntidad);
-		assertEquals(1, sem.getEntidadesSubscritas().size());
-		
+		sem.getEntidadesSubscritas().add(iEntidad);
 		sem.desuscripcionEntidad(iEntidad);
-		
 		assertEquals(0, sem.getEntidadesSubscritas().size());
+
+	}
+	@Test
+	void testSeNotificaALasEntidadesSuscriptasElInicioDeUnEstacionamientoConPocoSaldo() throws Exception {
+		sem.registrarCelularApp(celularApp);
+		sem.registrarCargaDeCredito(celularApp.getNumero(), 40d, puntoDeVenta);
+
+		sem.suscripcionEntidad(iEntidad);
+		sem.verificarYNotificarSobreUsuarioConPocoSaldo(celularApp);
 		
+		verify(iEntidad).usuarioConPocoSaldoIniciaEstacionamiento(celularApp.getNumero());
+	}
+	@Test
+	void testSeNotificaALasEntidadesSuscriptasLaCantidadDeEstacionamientosActivos() throws Exception {
+		sem.registrarCelularApp(celularApp);
+		sem.registrarCargaDeCredito(celularApp.getNumero(), 40d, puntoDeVenta);
+		sem.registrarInicioEstacionamientoViaApp(celularApp, celularApp.getPatente());
+		sem.suscripcionEntidad(iEntidad);
+		sem.informarEntidadesCantidadEstacionamientosActivos();
+		verify(iEntidad).cantidadEstacionamientosActivos(1);
 	}
 	
-	
-	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
